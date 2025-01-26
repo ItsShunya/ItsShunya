@@ -6,29 +6,32 @@ from lxml import etree
 import time
 import hashlib
 
+from typing import List, Dict, Tuple, Union
+
 # Fine-grained personal access token with All Repositories access:
 # Account permissions: read:Followers, read:Starring, read:Watching
 # Repository permissions: read:Commit statuses, read:Contents, read:Issues, read:Metadata, read:Pull Requests
 # Issues and pull requests permissions not needed at the moment, but may be used in the future
-HEADERS = {'authorization': 'token '+ os.environ['ACCESS_TOKEN']}
-USER_NAME = os.environ['USER_NAME'] # 'Andrew6rant'
-QUERY_COUNT = {'user_getter': 0, 'follower_getter': 0, 'graph_repos_stars': 0, 'recursive_loc': 0, 'graph_commits': 0, 'loc_query': 0}
-OUTPUT_PATH = "output/"
 
-def daily_readme(birthday):
+HEADERS: Dict[str, str] = {'authorization': 'token ' + os.environ['ACCESS_TOKEN']}
+USER_NAME: str = os.environ['USER_NAME']  # 'Andrew6rant'
+QUERY_COUNT: Dict[str, int] = {'user_getter': 0, 'follower_getter': 0, 'graph_repos_stars': 0, 'recursive_loc': 0, 'graph_commits': 0, 'loc_query': 0}
+OUTPUT_PATH: str = "output/"
+
+def daily_readme(birthday: datetime.datetime) -> str:
     """
-    Returns the length of time since I was born
-    e.g. 'XX years, XX months, XX days'
+    Returns the length of time since the given birthday
+    e.g., 'XX years, XX months, XX days'
     """
-    diff = relativedelta.relativedelta(datetime.datetime.today(), birthday)
+    diff: relativedelta.relativedelta = relativedelta.relativedelta(datetime.datetime.today(), birthday)
     return '{} {}, {} {}, {} {}{}'.format(
-        diff.years, 'year' + format_plural(diff.years), 
-        diff.months, 'month' + format_plural(diff.months), 
+        diff.years, 'year' + format_plural(diff.years),
+        diff.months, 'month' + format_plural(diff.months),
         diff.days, 'day' + format_plural(diff.days),
-        ' 🎂' if (diff.months == 0 and diff.days == 0) else '')
+        ' 🎂' if (diff.months == 0 and diff.days == 0) else ''
+    )
 
-
-def format_plural(unit):
+def format_plural(unit: int) -> str:
     """
     Returns a properly formatted number
     e.g.
@@ -39,20 +42,18 @@ def format_plural(unit):
     """
     return 's' if unit != 1 else ''
 
-
-def simple_request(func_name, query, variables):
+def simple_request(func_name: str, query: str, variables: Dict[str, Union[str, None]]) -> requests.Response:
     """
-    Returns a request, or raises an Exception if the response does not succeed.
+    Sends a GraphQL request and returns the response. Raises an exception if it fails.
     """
-    request = requests.post('https://api.github.com/graphql', json={'query': query, 'variables':variables}, headers=HEADERS)
+    request = requests.post('https://api.github.com/graphql', json={'query': query, 'variables': variables}, headers=HEADERS)
     if request.status_code == 200:
         return request
     raise Exception(func_name, ' has failed with a', request.status_code, request.text, QUERY_COUNT)
 
-
-def graph_commits(start_date, end_date):
+def graph_commits(start_date: str, end_date: str) -> int:
     """
-    Uses GitHub's GraphQL v4 API to return my total commit count
+    Returns the total commit count for the specified date range.
     """
     query_count('graph_commits')
     query = '''
@@ -65,14 +66,15 @@ def graph_commits(start_date, end_date):
             }
         }
     }'''
-    variables = {'start_date': start_date,'end_date': end_date, 'login': USER_NAME}
+    variables = {'start_date': start_date, 'end_date': end_date, 'login': USER_NAME}
     request = simple_request(graph_commits.__name__, query, variables)
     return int(request.json()['data']['user']['contributionsCollection']['contributionCalendar']['totalContributions'])
 
-
-def graph_repos_stars(count_type, owner_affiliation, cursor=None, add_loc=0, del_loc=0):
+def graph_repos_stars(
+    count_type: str, owner_affiliation: List[str], cursor: Union[str, None] = None, add_loc: int = 0, del_loc: int = 0
+) -> Union[int, None]:
     """
-    Uses GitHub's GraphQL v4 API to return my total repository, star, or lines of code count.
+    Uses GitHub's GraphQL v4 API to return the total repository count, stars, or LOC count.
     """
     query_count('graph_repos_stars')
     query = '''
@@ -104,7 +106,7 @@ def graph_repos_stars(count_type, owner_affiliation, cursor=None, add_loc=0, del
             return request.json()['data']['user']['repositories']['totalCount']
         elif count_type == 'stars':
             return stars_counter(request.json()['data']['user']['repositories']['edges'])
-
+    return None
 
 def recursive_loc(owner, repo_name, data, cache_comment, addition_total=0, deletion_total=0, my_commits=0, cursor=None):
     """
@@ -447,7 +449,7 @@ if __name__ == '__main__':
     user_data, user_time = perf_counter(user_getter, USER_NAME)
     OWNER_ID, acc_date = user_data
     formatter('account data', user_time)
-    age_data, age_time = perf_counter(daily_readme, datetime.datetime(2002, 7, 5))
+    age_data, age_time = perf_counter(daily_readme, datetime.datetime(1998, 5, 26))
     formatter('age calculation', age_time)
     total_loc, loc_time = perf_counter(loc_query, ['OWNER', 'COLLABORATOR', 'ORGANIZATION_MEMBER'], 7)
     formatter('LOC (cached)', loc_time) if total_loc[-1] else formatter('LOC (no cache)', loc_time)
