@@ -5,6 +5,7 @@ import os
 from lxml import etree
 import time
 import hashlib
+from pathlib import Path
 
 # Import modules.
 from utils import formatter
@@ -21,7 +22,7 @@ from typing import List, Dict, Tuple, Union
 
 HEADERS: Dict[str, str] = {'authorization': 'token ' + os.environ['ACCESS_TOKEN']}
 USER_NAME: str = os.environ['USER_NAME']
-OUTPUT_PATH: str = "output/"
+OUTPUT_PATH: str = "../output/"
 
 def daily_readme(birthday: datetime.datetime) -> str:
     """
@@ -76,8 +77,8 @@ if __name__ == '__main__':
 
     for index in range(len(total_loc)-1): total_loc[index] = '{:,}'.format(total_loc[index]) # format added, deleted, and total LOC
 
-    svg.svg_overwrite(OUTPUT_PATH + 'dark_mode.svg', age_data, commit_data, star_data, repo_data, contrib_data, follower_data, total_loc[:-1])
-    svg.svg_overwrite(OUTPUT_PATH + 'light_mode.svg', age_data, commit_data, star_data, repo_data, contrib_data, follower_data, total_loc[:-1])
+    svg.svg_overwrite(Path(OUTPUT_PATH + 'dark_mode.svg').absolute, age_data, commit_data, star_data, repo_data, contrib_data, follower_data, total_loc[:-1])
+    svg.svg_overwrite(Path(OUTPUT_PATH + 'light_mode.svg').absolute, age_data, commit_data, star_data, repo_data, contrib_data, follower_data, total_loc[:-1])
 
     # move cursor to override 'Calculation times:' with 'Total function time:' and the total function time, then move cursor back
     print('\033[F\033[F\033[F\033[F\033[F\033[F\033[F\033[F',
