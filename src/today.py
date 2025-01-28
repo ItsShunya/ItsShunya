@@ -1,15 +1,11 @@
 import datetime
 from dateutil import relativedelta
-import requests
 import os
 from lxml import etree
-import time
-import hashlib
 from pathlib import Path
 
 # Import modules.
-from utils import formatter
-from cache import cache
+from utils import formatter, timer
 from graphql.github import *
 from svg import svg
 
@@ -37,15 +33,6 @@ def daily_readme(birthday: datetime.datetime) -> str:
         ' 🎂' if (diff.months == 0 and diff.days == 0) else ''
     )
 
-def perf_counter(funct, *args):
-    """
-    Calculates the time it takes for a function to run
-    Returns the function result and the time differential
-    """
-    start = time.perf_counter()
-    funct_return = funct(*args)
-    return funct_return, time.perf_counter() - start
-
 if __name__ == '__main__':
     """
     Andrew Grant (Andrew6rant), 2022-2025
@@ -53,18 +40,18 @@ if __name__ == '__main__':
     print('Calculation times:')
     # define global variable for owner ID and calculate user's creation date
     # e.g {'id': 'MDQ6VXNlcjU3MzMxMTM0'} and 2019-11-03T21:15:07Z for username 'Andrew6rant'
-    user_data, user_time = perf_counter(user_getter, USER_NAME)
+    user_data, user_time = timer.perf_counter(user_getter, USER_NAME)
     OWNER_ID, acc_date = user_data
     formatter.timeDiffFormatted('account data', user_time)
-    age_data, age_time = perf_counter(daily_readme, datetime.datetime(1998, 5, 26))
+    age_data, age_time = timer.perf_counter(daily_readme, datetime.datetime(1998, 5, 26))
     formatter.timeDiffFormatted('age calculation', age_time)
-    total_loc, loc_time = perf_counter(loc_query, ['OWNER', 'COLLABORATOR', 'ORGANIZATION_MEMBER'], 7)
+    total_loc, loc_time = timer.perf_counter(loc_query, ['OWNER', 'COLLABORATOR', 'ORGANIZATION_MEMBER'], 7)
     formatter.timeDiffFormatted('LOC (cached)', loc_time) if total_loc[-1] else formatter.timeDiffFormatted('LOC (no cache)', loc_time)
-    commit_data, commit_time = perf_counter(commit_counter, 7)
-    star_data, star_time = perf_counter(graph_repos_stars, 'stars', ['OWNER'])
-    repo_data, repo_time = perf_counter(graph_repos_stars, 'repos', ['OWNER'])
-    contrib_data, contrib_time = perf_counter(graph_repos_stars, 'repos', ['OWNER', 'COLLABORATOR', 'ORGANIZATION_MEMBER'])
-    follower_data, follower_time = perf_counter(follower_getter, USER_NAME)
+    commit_data, commit_time = timer.perf_counter(commit_counter, 7)
+    star_data, star_time = timer.perf_counter(graph_repos_stars, 'stars', ['OWNER'])
+    repo_data, repo_time = timer.perf_counter(graph_repos_stars, 'repos', ['OWNER'])
+    contrib_data, contrib_time = timer.perf_counter(graph_repos_stars, 'repos', ['OWNER', 'COLLABORATOR', 'ORGANIZATION_MEMBER'])
+    follower_data, follower_time = timer.perf_counter(follower_getter, USER_NAME)
 
     # several repositories that I've contributed to have since been deleted.
     print(f"OWNER_ID: {OWNER_ID}")
