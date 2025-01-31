@@ -9,10 +9,16 @@ HEADERS: Dict[str, str] = {'authorization': 'token ' + os.environ['ACCESS_TOKEN'
 USER_NAME: str = os.environ['USER_NAME']
 OUTPUT_PATH: str = "output/"
 QUERY_COUNT: Dict[str, int] = {'user_getter': 0, 'follower_getter': 0, 'graph_repos_stars': 0, 'recursive_loc': 0, 'graph_commits': 0, 'loc_query': 0}
+OWNER_ID: str = ''
 
 def get_query_count():
     return QUERY_COUNT
 
+def set_owner_id(new_OWNER_ID):
+    global OWNER_ID
+    
+    OWNER_ID = new_OWNER_ID
+    
 def query_count(funct_id):
     """
     Counts how many times the GitHub GraphQL API is called

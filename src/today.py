@@ -8,17 +8,12 @@ from pathlib import Path
 from utils import formatter, timer
 from graphql.github import *
 from svg import svg
-
-from typing import List, Dict, Tuple, Union
+from config import environment
 
 # Fine-grained personal access token with All Repositories access:
 # Account permissions: read:Followers, read:Starring, read:Watching
 # Repository permissions: read:Commit statuses, read:Contents, read:Issues, read:Metadata, read:Pull Requests
 # Issues and pull requests permissions not needed at the moment, but may be used in the future
-
-HEADERS: Dict[str, str] = {'authorization': 'token ' + os.environ['ACCESS_TOKEN']}
-USER_NAME: str = os.environ['USER_NAME']
-OUTPUT_PATH: str = "output/"
 
 def daily_readme(birthday: datetime.datetime) -> str:
     """
@@ -35,18 +30,26 @@ def daily_readme(birthday: datetime.datetime) -> str:
 
 if __name__ == '__main__':
     """
-    Andrew Grant (Andrew6rant), 2022-2025
     """
+    env = environment.EnvironmentConfig()
+    env.load_env_vars()
+    
+    USER_NAME: str = env.USER_NAME
+    OUTPUT_PATH: str = env.OUTPUT_PATH
+    BIRTHDAY: datetime = env.BIRTHDAY
+    
     print('Calculation times:')
     # define global variable for owner ID and calculate user's creation date
     # e.g {'id': 'MDQ6VXNlcjU3MzMxMTM0'} and 2019-11-03T21:15:07Z for username 'Andrew6rant'
     user_data, user_time = timer.perf_counter(user_getter, USER_NAME)
     OWNER_ID, acc_date = user_data
+    set_owner_id(OWNER_ID)
     formatter.timeDiffFormatted('account data', user_time)
-    age_data, age_time = timer.perf_counter(daily_readme, datetime.datetime(1998, 5, 26))
+    age_data, age_time = timer.perf_counter(daily_readme, BIRTHDAY)
     formatter.timeDiffFormatted('age calculation', age_time)
     total_loc, loc_time = timer.perf_counter(loc_query, ['OWNER', 'COLLABORATOR', 'ORGANIZATION_MEMBER'], 7)
     formatter.timeDiffFormatted('LOC (cached)', loc_time) if total_loc[-1] else formatter.timeDiffFormatted('LOC (no cache)', loc_time)
+    
     commit_data, commit_time = timer.perf_counter(commit_counter, 7)
     star_data, star_time = timer.perf_counter(graph_repos_stars, 'stars', ['OWNER'])
     repo_data, repo_time = timer.perf_counter(graph_repos_stars, 'repos', ['OWNER'])
@@ -55,7 +58,7 @@ if __name__ == '__main__':
 
     # several repositories that I've contributed to have since been deleted.
     print(f"OWNER_ID: {OWNER_ID}")
-    if OWNER_ID == {'id': 'MDQ6VXNlcjg1NTQ2'}: # only calculate for user Andrew6rant
+    if OWNER_ID == {'id': 'MDQ6VXNlcjg1NTQ21'}: # only calculate for user Andrew6rant
         archived_data = add_archive()
         for index in range(len(total_loc)-1):
             total_loc[index] += archived_data[index]
@@ -64,9 +67,9 @@ if __name__ == '__main__':
 
     for index in range(len(total_loc)-1): total_loc[index] = '{:,}'.format(total_loc[index]) # format added, deleted, and total LOC
 
-    svg.svg_overwrite(Path(OUTPUT_PATH + 'dark_mode.svg').resolve(), age_data, commit_data, star_data, repo_data, contrib_data, follower_data, total_loc[:-1])
-    svg.svg_overwrite(Path(OUTPUT_PATH + 'light_mode.svg').resolve(), age_data, commit_data, star_data, repo_data, contrib_data, follower_data, total_loc[:-1])
-    print(Path(OUTPUT_PATH + 'dark_mode.svg').resolve())
+    svg.svg_overwrite(Path('output/' + 'dark_mode.svg').resolve(), age_data, commit_data, star_data, repo_data, contrib_data, follower_data, total_loc[:-1])
+    svg.svg_overwrite(Path('output/' + 'light_mode.svg').resolve(), age_data, commit_data, star_data, repo_data, contrib_data, follower_data, total_loc[:-1])
+
     # move cursor to override 'Calculation times:' with 'Total function time:' and the total function time, then move cursor back
     print('\033[F\033[F\033[F\033[F\033[F\033[F\033[F\033[F',
         '{:<21}'.format('Total function time:'), '{:>11}'.format('%.4f' % (user_time + age_time + loc_time + commit_time + star_time + repo_time + contrib_time)),
