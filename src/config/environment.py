@@ -2,7 +2,6 @@ import os
 from datetime import datetime
 from typing import Optional
 from pathlib import Path
-from dotenv import load_dotenv
 
 class EnvironmentConfig:
     """
@@ -67,6 +66,7 @@ class EnvironmentConfig:
         
         # Load variables from .env file if in development
         if self.env == "development":
+            from dotenv import load_dotenv
             load_dotenv()
             
         # Load variables
