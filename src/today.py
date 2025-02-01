@@ -8,7 +8,7 @@ from pathlib import Path
 from utils import formatter, timer
 from graphql.github import *
 from svg import svg
-from config import environment
+from config import environment, config
 
 # Fine-grained personal access token with All Repositories access:
 # Account permissions: read:Followers, read:Starring, read:Watching
@@ -31,12 +31,23 @@ def daily_readme(birthday: datetime.datetime) -> str:
 if __name__ == '__main__':
     """
     """
+    # Set up environment variables.
     env = environment.EnvironmentConfig()
     env.load_env_vars()
     
+    # Env vars.
     USER_NAME: str = env.USER_NAME
     OUTPUT_PATH: str = env.OUTPUT_PATH
     BIRTHDAY: datetime = env.BIRTHDAY
+      
+    # Set up configuration variables.
+    config = config.ConfigParser(config_path='config/' + USER_NAME + '.yaml')
+    
+    # Config vars.
+    print(config.user)
+    print(config.languages)
+    print(config.contact)
+    print(config.hobbies)
     
     print('Calculation times:')
     # define global variable for owner ID and calculate user's creation date
@@ -55,15 +66,6 @@ if __name__ == '__main__':
     repo_data, repo_time = timer.perf_counter(graph_repos_stars, 'repos', ['OWNER'])
     contrib_data, contrib_time = timer.perf_counter(graph_repos_stars, 'repos', ['OWNER', 'COLLABORATOR', 'ORGANIZATION_MEMBER'])
     follower_data, follower_time = timer.perf_counter(follower_getter, USER_NAME)
-
-    # several repositories that I've contributed to have since been deleted.
-    print(f"OWNER_ID: {OWNER_ID}")
-    if OWNER_ID == {'id': 'MDQ6VXNlcjg1NTQ21'}: # only calculate for user Andrew6rant
-        archived_data = add_archive()
-        for index in range(len(total_loc)-1):
-            total_loc[index] += archived_data[index]
-        contrib_data += archived_data[-1]
-        commit_data += int(archived_data[-2])
 
     for index in range(len(total_loc)-1): total_loc[index] = '{:,}'.format(total_loc[index]) # format added, deleted, and total LOC
 

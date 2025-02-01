@@ -1,0 +1,45 @@
+User:
+  Username: "Shunya"
+  Birthday: "1998-05-26"
+  Operative_System:
+    - "NixOS"
+    - "Android 15"
+  Job:
+    - "Embedded Software Engineer"
+  IDE:
+    - "VSCode"
+    - "Qt Creator"
+    - "Microchip Studio"
+
+Languages:
+  Programming:
+    - "C"
+    - "C++"
+    - "Python"
+  Other:
+    - "Bash"
+    - "SQL"
+    - "LaTeX"
+  Real:
+    - "English"
+    - "Spanish"
+    - "Catalan"
+
+Hobbies:
+  Software:
+    - "OSS"
+    - "Kernel"
+    - "OS"
+  Hardware:
+    - "Embedded"
+    - "RTOS"
+    - "PCB"
+  Other:
+    - "Swimming"
+    - "Gardening"
+
+Contact:
+  Personal_Mail: "luque.viictor@gmail.com"
+  Work_Mail: "victor.luque@neuroelectrics.com"
+  Linkedin: "https://linkedin.com/in/victorluquemartinez"
+  Discord: "ItsShunya#1234"

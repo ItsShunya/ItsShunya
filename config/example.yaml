@@ -1,0 +1,43 @@
+User:
+  Username: "example_user"
+  Birthday: "1990-01-01"
+  Operative_System:
+    - "Windows"
+    - "Linux"
+    - "macOS"
+  Job:
+    - "Software Engineer"
+    - "Data Scientist"
+  IDE:
+    - "VSCode"
+    - "PyCharm"
+    - "Eclipse"
+
+Languages:
+  Programming:
+    - "Python"
+    - "C++"
+    - "Java"
+  Other:
+    - "Bash"
+    - "SQL"
+  Real:
+    - "English"
+    - "Spanish"
+
+Hobbies:
+  Software:
+    - "Game Development"
+    - "AI Research"
+  Hardware:
+    - "Raspberry Pi"
+    - "3D Printing"
+  Other:
+    - "Cycling"
+    - "Photography"
+
+Contact:
+  Personal_Mail: "example@gmail.com"
+  Work_Mail: "example@company.com"
+  Linkedin: "https://linkedin.com/in/example"
+  Discord: "example#1234"
