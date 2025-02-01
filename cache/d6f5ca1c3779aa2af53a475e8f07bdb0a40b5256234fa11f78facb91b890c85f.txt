@@ -1,10 +1,10 @@
 This line is a comment block. Write whatever you want here.
 This line is a comment block. Write whatever you want here.
-This line is a comment block. Write whatever you want here.
-This line is a comment block. Write whatever you want here.
-This line is a comment block. Write whatever you want here.
-This line is a comment block. Write whatever you want here.
-This line is a comment block. Write whatever you want here.
+repository (hashed)  total commits  my commits  LOC added by me  LOC deleted by me
+         \                \                \           \_____________  \
+          \                \                \______________________  \  \
+           \                \___________________________________   \  \  \
+____________\___________________________________________________\___\__\__\_______
 bec20a6f41b0e26efb9d8dfc469214e92078b08c41eae5b36e6ddb253b0921f7 63 0 0 0
 b9db32132433dafd1d02d4b4a1e429b814fab8d04ee4d554de5dacb5d881181e 14 0 0 0
 b942604bf9e8ed30779e531544782a43355d628e69830dfc94feb7e6e163d15e 13 0 0 0
@@ -27,4 +27,4 @@ d40204ca6b3c30c419e9a975fedca99029b8c9f6e95f41f753fb8d7da9f21a9f 7 0 0 0
 78daf898ccb07e284287f890f588e7b3194687d13122a3f0070db34649f46ce3 24 15 363 117
 6910c9cb26ea06d69cdbe55e7e5a1395bccce85f18b7383a06d9ec06e1676cfe 2010 2010 0 0
 d5b29b438e1b86fd5a11444829ad1dc2ba8848846a897e5f79e1c9232789dfff 1109 6 232 219
-96839e1ec9279fb5d06b6281eec50b8648421600806c4c082bf8f2bbc3c19ba0 29 25 3301 889
+96839e1ec9279fb5d06b6281eec50b8648421600806c4c082bf8f2bbc3c19ba0 31 27 3498 917
