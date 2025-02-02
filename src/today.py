@@ -1,7 +1,4 @@
 import datetime
-from dateutil import relativedelta
-import os
-from lxml import etree
 from pathlib import Path
 
 # Import modules.
@@ -15,40 +12,27 @@ from config import environment, config
 # Repository permissions: read:Commit statuses, read:Contents, read:Issues, read:Metadata, read:Pull Requests
 # Issues and pull requests permissions not needed at the moment, but may be used in the future
 
-def daily_readme(birthday: datetime.datetime) -> str:
-    """
-    Returns the length of time since the given birthday
-    e.g., 'XX years, XX months, XX days'
-    """
-    diff: relativedelta.relativedelta = relativedelta.relativedelta(datetime.datetime.today(), birthday)
-    return '{} {}, {} {}, {} {}{}'.format(
-        diff.years, 'year' + formatter.toPlural(diff.years),
-        diff.months, 'month' + formatter.toPlural(diff.months),
-        diff.days, 'day' + formatter.toPlural(diff.days),
-        ' 🎂' if (diff.months == 0 and diff.days == 0) else ''
-    )
-
 if __name__ == '__main__':
     """
     """
     # Set up environment variables.
     env = environment.EnvironmentConfig()
     env.load_env_vars()
-    
+
     # Env vars.
     USER_NAME: str = env.USER_NAME
     OUTPUT_PATH: str = env.OUTPUT_PATH
     BIRTHDAY: datetime = env.BIRTHDAY
-      
+
     # Set up configuration variables.
     config = config.ConfigParser(config_path='config/' + USER_NAME + '.yaml')
-    
+
     # Config vars.
     print(config.user)
     print(config.languages)
     print(config.contact)
     print(config.hobbies)
-    
+
     print('Calculation times:')
     # define global variable for owner ID and calculate user's creation date
     # e.g {'id': 'MDQ6VXNlcjU3MzMxMTM0'} and 2019-11-03T21:15:07Z for username 'Andrew6rant'
@@ -56,11 +40,11 @@ if __name__ == '__main__':
     OWNER_ID, acc_date = user_data
     set_owner_id(OWNER_ID)
     formatter.timeDiffFormatted('account data', user_time)
-    age_data, age_time = timer.perf_counter(daily_readme, BIRTHDAY)
+    age_data, age_time = timer.perf_counter(formatter.birthdayFormatted, BIRTHDAY)
     formatter.timeDiffFormatted('age calculation', age_time)
     total_loc, loc_time = timer.perf_counter(loc_query, ['OWNER', 'COLLABORATOR', 'ORGANIZATION_MEMBER'], 7)
     formatter.timeDiffFormatted('LOC (cached)', loc_time) if total_loc[-1] else formatter.timeDiffFormatted('LOC (no cache)', loc_time)
-    
+
     commit_data, commit_time = timer.perf_counter(commit_counter, 7)
     star_data, star_time = timer.perf_counter(graph_repos_stars, 'stars', ['OWNER'])
     repo_data, repo_time = timer.perf_counter(graph_repos_stars, 'repos', ['OWNER'])

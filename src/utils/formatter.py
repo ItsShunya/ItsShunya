@@ -1,4 +1,6 @@
 from typing import Union
+import datetime
+from dateutil import relativedelta
 
 def toPlural(unit: int) -> str:
     """
@@ -41,7 +43,7 @@ def timeDiffFormatted(query_type: str, difference: float, funct_return: bool = F
     Returns
     -------
     Union[str, bool]
-        Returns the formatted time difference string if ``whitespace`` is nonzero, 
+        Returns the formatted time difference string if ``whitespace`` is nonzero,
         otherwise returns ``funct_return`` unmodified.
     """
     print('{:<23}'.format('   ' + query_type + ':'), sep='', end='')
@@ -49,3 +51,16 @@ def timeDiffFormatted(query_type: str, difference: float, funct_return: bool = F
     if whitespace:
         return f"{'{:,}'.format(funct_return): <{whitespace}}"
     return funct_return
+
+def birthdayFormatted(birthday: datetime.datetime) -> str:
+    """
+    Returns the length of time since the given birthday
+    e.g., 'XX years, XX months, XX days'
+    """
+    diff: relativedelta.relativedelta = relativedelta.relativedelta(datetime.datetime.today(), birthday)
+    return '{} {}, {} {}, {} {}{}'.format(
+        diff.years, 'year' + toPlural(diff.years),
+        diff.months, 'month' + toPlural(diff.months),
+        diff.days, 'day' + toPlural(diff.days),
+        ' 🎂' if (diff.months == 0 and diff.days == 0) else ''
+    )
