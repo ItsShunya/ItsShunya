@@ -25,13 +25,14 @@ if __name__ == '__main__':
     BIRTHDAY: datetime = env.BIRTHDAY
 
     # Set up configuration variables.
-    config = config.ConfigParser(config_path='config/' + USER_NAME + '.yaml')
+    conf = config.ConfigParser(config_path='config/' + USER_NAME + '.yaml')
+    BIRTHDAY : datetime = datetime.datetime.strptime(conf.user.get('Birthday', ''), '%Y-%m-%d')
 
     # Config vars.
-    print(config.user)
-    print(config.languages)
-    print(config.contact)
-    print(config.hobbies)
+    print(conf.user)
+    print(conf.languages)
+    print(conf.contact)
+    print(conf.hobbies)
 
     print('Calculation times:')
     # define global variable for owner ID and calculate user's creation date
