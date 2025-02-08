@@ -1,134 +1,42 @@
 import os
-from datetime import datetime
 from typing import Optional
-from pathlib import Path
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from dataclass_wizard import EnvWizard
+from dotenv import load_dotenv
 
 @dataclass
-class EnvironmentConfig:
+class EnvConfig(EnvWizard):
     """
-    Manages environment variables for the application.
+    Manages environment variables for the application using EnvWizard.
 
-    Provides methods to set and retrieve required environment variables with proper validation.
+    Automatically handles loading from .env files and system environment variables.
     """
-    _access_token: Optional[str] = field(repr = False, default = None)
-    _user_name: Optional[str] = field(default = None)
-    _output_path: Optional[str] = field(default = None)
-    _birthday: Optional[datetime] = field(default = None)
-    _env: str = field(default = 'production')  # Default to production
+    ACCESS_TOKEN: Optional[str] = None
+    USER_NAME: Optional[str] = None
+    OUTPUT_PATH: Optional[str] = None
+    ENV: str = "production"  # Default to production
 
-    @property
-    def env(self) -> str:
-        """Get the current environment mode."""
-        return self._env
-
-    @env.setter
-    def env(self, value: str) -> None:
+    def __post_init__(self):
         """
-        Set the environment mode (development or production).
-
-        Args:
-            value: The environment mode to set. Must be either "development" or "production".
-
-        Raises:
-            ValueError: If invalid environment mode is provided
+        Post-initialization method to perform additional validations and setup.
         """
-        if value not in ["development", "production"]:
-            raise ValueError("Invalid environment mode. Must be 'development' or 'production'.")
+        # Automatically load .env file if in development mode
+        if self.ENV.lower() == "development":
+            self._load_env_vars()
 
-        self._env = value
-
-    @staticmethod
-    def __determine_environment() -> str:
+    def _load_env_vars(self):
         """
-        Determines the environment based on the presence of a .env file.
-
-        Checks the current directory and the parent directory for a .env file.
-        Returns "development" if found, otherwise "production".
-
-        Returns:
-            str: "development" or "production"
+        Load environment variables from .env file and override system variables.
         """
-        current_dir = Path(".")
-        parent_dir = Path("..")
+        load_dotenv()
+        self.ACCESS_TOKEN = os.getenv('ACCESS_TOKEN', self.ACCESS_TOKEN)
+        self.USER_NAME = os.getenv('USER_NAME', self.USER_NAME)
+        self.OUTPUT_PATH = os.getenv('OUTPUT_PATH', self.OUTPUT_PATH)
+        #self.BIRTHDAY = os.getenv('BIRTHDAY', self.BIRTHDAY)
+        #self.ENV = os.getenv('ENV', self.ENV)
 
-        if current_dir.joinpath(".env").exists() or parent_dir.joinpath(".env").exists():
-            return "development"
-
-        return "production"
-
-    def load_env_vars(self) -> None:
+    def to_dict(self):
         """
-        Loads environment variables from either .env file (development) or system (production).
+        Convert the configuration to a dictionary.
         """
-        # Set environment mode
-        self.env = self.__determine_environment()
-
-        # Load variables from .env file if in development
-        if self.env == "development":
-            from dotenv import load_dotenv
-            load_dotenv()
-
-        # Load variables
-        self._access_token = os.getenv('ACCESS_TOKEN')
-        self._user_name = os.getenv('USER_NAME')
-        self._output_path = os.getenv('OUTPUT_PATH')
-
-        # Parse birthday string into datetime object
-        birthday_str = os.getenv('BIRTHDAY')
-        if birthday_str:
-            try:
-                self._birthday = datetime.strptime(birthday_str, '%Y-%m-%d')
-            except ValueError:
-                self._birthday = None
-
-    @property
-    def ACCESS_TOKEN(self) -> Optional[str]:
-        """Get the access token value."""
-        return self._access_token
-
-    @ACCESS_TOKEN.setter
-    def ACCESS_TOKEN(self, value: str) -> None:
-        """Set the access token value."""
-        self._access_token = value
-
-    @property
-    def USER_NAME(self) -> Optional[str]:
-        """Get the user name value."""
-        return self._user_name
-
-    @USER_NAME.setter
-    def USER_NAME(self, value: str) -> None:
-        """Set the user name value."""
-        self._user_name = value
-
-    @property
-    def OUTPUT_PATH(self) -> Optional[str]:
-        """Get the output path value."""
-        return self._output_path
-
-    @OUTPUT_PATH.setter
-    def OUTPUT_PATH(self, value: str) -> None:
-        """Set the output path value."""
-        self._output_path = value
-
-    @property
-    def BIRTHDAY(self) -> Optional[datetime]:
-        """Get the birthday value as a datetime object."""
-        return self._birthday
-
-    @BIRTHDAY.setter
-    def BIRTHDAY(self, value: str) -> None:
-        """
-        Set the birthday value from a string in format 'YYYY-MM-DD'.
-
-        Args:
-            value: Birthday string to parse
-
-        Raises:
-            ValueError: If invalid date format
-        """
-        try:
-            self._birthday = datetime.strptime(value, '%Y-%m-%d')
-        except ValueError:
-            raise ValueError("Invalid date format for BIRTHDAY. Expected 'YYYY-MM-DD'.")
+        return self.__dict__
