@@ -2,7 +2,6 @@ import os
 from typing import Optional
 from dataclasses import dataclass
 from dataclass_wizard import EnvWizard
-from dotenv import load_dotenv
 
 @dataclass
 class EnvConfig(EnvWizard):
@@ -28,6 +27,7 @@ class EnvConfig(EnvWizard):
         """
         Load environment variables from .env file and override system variables.
         """
+        from dotenv import load_dotenv
         load_dotenv()
         self.ACCESS_TOKEN = os.getenv('ACCESS_TOKEN', self.ACCESS_TOKEN)
         self.USER_NAME = os.getenv('USER_NAME', self.USER_NAME)

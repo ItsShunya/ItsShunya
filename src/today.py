@@ -16,7 +16,7 @@ if __name__ == '__main__':
     """
     """
     # Set up environment variables.
-    env = environment.EnvConfig(ENV = 'development') # Change to ENV = 'development' if running locally.
+    env = environment.EnvConfig(ENV = 'production') # Change to ENV = 'development' if running locally.
     USER_NAME: str = env.USER_NAME
     OUTPUT_PATH: str = env.OUTPUT_PATH
 
