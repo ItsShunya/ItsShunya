@@ -22,17 +22,18 @@ if __name__ == '__main__':
     # Env vars.
     USER_NAME: str = env.USER_NAME
     OUTPUT_PATH: str = env.OUTPUT_PATH
-    BIRTHDAY: datetime = env.BIRTHDAY
 
     # Set up configuration variables.
-    conf = config.ConfigParser(config_path='config/' + USER_NAME + '.yaml')
-    BIRTHDAY : datetime = datetime.datetime.strptime(conf.user.get('Birthday', ''), '%Y-%m-%d')
+    conf = config.ConfigParser.from_yaml_file('config/' + USER_NAME + '.yaml')
+
+    print(conf)
+    BIRTHDAY : datetime = conf.user.birthday
 
     # Config vars.
     print(conf.user)
     print(conf.languages)
     print(conf.contact)
-    print(conf.hobbies)
+    print(conf.activities)
 
     print('Calculation times:')
     # define global variable for owner ID and calculate user's creation date

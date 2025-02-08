@@ -1,75 +1,39 @@
-import yaml
-import os
+from datetime import datetime
 from dataclasses import dataclass, field
-from dataclass_wizard import property_wizard
-from collections import defaultdict
-from typing import Dict, Optional, Annotated
+from dataclass_wizard import YAMLWizard
 
 @dataclass
-class ConfigParser:
+class User:
+    username:           str
+    birthday:           datetime
+    operative_system:   list[str]  = field(default_factory=list)
+    position:           str | None = None
+    ide:                list[str]  = field(default_factory = list)
 
-    config_path:    str  = field(default = './config/example.yaml')
-    user:           Annotated[
-        defaultdict[str, str], field(default_factory = lambda: defaultdict(str))]
-    languages:      Annotated[
-         defaultdict[str, str], field(default_factory = lambda: defaultdict(str))]
-    hobbies:           Annotated[
-        defaultdict[str, str], field(default_factory = lambda: defaultdict(str))]
-    contact:           Annotated[
-        defaultdict[str, str], field(default_factory = lambda: defaultdict(str))]
+@dataclass
+class Languages:
+    programming:    list[str] = field(default_factory = list)
+    other:          list[str] = field(default_factory = list)
+    real:           list[str] = field(default_factory = list)
 
-    # We add these _variables to help the IDE identify the @property utilities.
-    # This is a workaround for using @property together with @dataclass.
-    # see https://florimond.dev/en/posts/2018/10/reconciling-dataclasses-and-properties-in-python
-    _config_path:   str  = field(init = False)
-    _user:          Optional[Dict[str, str]] = field(init = False, repr = False)
-    _languages:     Optional[Dict[str, str]] = field(init = False, repr = False)
-    _hobbies:       Optional[Dict[str, str]] = field(init = False, repr = False)
-    _contact:       Optional[Dict[str, str]] = field(init = False, repr = False)
+@dataclass
+class Activities:
+    software:       list[str] = field(default_factory = list)
+    hardware:       list[str] = field(default_factory = list)
+    other:          list[str] = field(default_factory = list)
 
-    def __post_init__(self):
-        self.load_config()
+@dataclass
+class Contact:
+    personal_mail:  str | None = None
+    work_mail:      str | None = None
+    linkedin:       str | None = None
+    discord:        str | None = None
+    stackoverflow:  str | None = None
 
-    def load_config(self):
-        if not os.path.exists(self.config_path):
-            raise FileNotFoundError(f"Configuration file not found: {self.config_path}")
-
-        with open(self.config_path, 'r', encoding='utf-8') as file:
-            data = yaml.safe_load(file)
-
-        self.user = data.get('User', {})
-        self.languages = data.get('Languages', {})
-        self.hobbies = data.get('Hobbies', {})
-        self.contact = data.get('Contact', {})
-
-    @property
-    def user(self):
-        return self._user
-
-    @user.setter
-    def user(self, value):
-        self._user = value
-
-    @property
-    def languages(self):
-        return self._languages
-
-    @languages.setter
-    def languages(self, value):
-        self._languages = value
-
-    @property
-    def hobbies(self):
-        return self._hobbies
-
-    @hobbies.setter
-    def hobbies(self, value):
-        self._hobbies = value
-
-    @property
-    def contact(self):
-        return self._contact
-
-    @contact.setter
-    def contact(self, value):
-        self._contact = value
+@dataclass
+class ConfigParser(YAMLWizard):
+    #config_path: str = field(default='./config/example.yaml', repr=False)
+    user:       User
+    languages:  Languages
+    activities: Activities
+    contact:    Contact
