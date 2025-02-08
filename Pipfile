@@ -8,6 +8,9 @@ python-dateutil = "*"
 requests = "*"
 lxml = "*"
 pyyaml = "*"
+dataclass-wizard = "*"
+pytz = "*"
+tzdata = "*"
 
 [dev-packages]
 python-dotenv = "*"
