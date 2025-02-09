@@ -1,3 +1,5 @@
+
+# The Python Standard Library.
 from typing import Union
 import datetime
 from dateutil import relativedelta
@@ -54,8 +56,33 @@ def timeDiffFormatted(query_type: str, difference: float, funct_return: bool = F
 
 def birthdayFormatted(birthday: datetime.datetime) -> str:
     """
-    Returns the length of time since the given birthday
-    e.g., 'XX years, XX months, XX days'
+    Returns a formatted string representing the time since the given birthday.
+
+    This function calculates the time elapsed since the provided birthday and returns
+    a human-readable string in the format 'XX years, XX months, XX days'. If the current
+    date matches the birthday (same day and month), a birthday emoji 🎂 is appended to
+    the string.
+
+    Parameters
+    ----------
+    birthday : datetime.datetime
+        The date of birth to calculate the time elapsed from.
+
+    Returns
+    -------
+    str
+        A formatted string representing the time elapsed since the birthday.
+
+    Examples
+    --------
+    >>> from datetime import datetime
+    >>> birthday = datetime(1990, 5, 15)
+    >>> birthdayFormatted(birthday)
+    '33 years, 0 months, 0 days 🎂'
+    >>> current_date = datetime.today()
+    >>> birthday = current_date - relativedelta.relativedelta(days=5)
+    >>> birthdayFormatted(birthday)
+    '0 years, 0 months, 5 days'
     """
     diff: relativedelta.relativedelta = relativedelta.relativedelta(datetime.datetime.today(), birthday)
     return '{} {}, {} {}, {} {}{}'.format(

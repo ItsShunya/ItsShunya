@@ -1,7 +1,8 @@
+# The Python Standard Library.
 import datetime
 from pathlib import Path
 
-# Import modules.
+# Internal Python modules.
 from utils import formatter, timer
 from graphql.github import *
 from svg import svg_modificator

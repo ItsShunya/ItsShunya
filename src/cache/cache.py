@@ -1,12 +1,42 @@
-import hashlib, os
+# The Python Standard Library.
+import hashlib
+import os
+
+# Project's internal modules.
 from graphql import github
 
 USER_NAME: str = os.environ['USER_NAME']
 
 def cache_builder(edges, comment_size, force_cache, loc_add=0, loc_del=0):
     """
-    Checks each repository in edges to see if it has been updated since the last time it was cached
-    If it has, run recursive_loc on that repository to update the LOC count
+    Builds or updates the cache file with repository data.
+
+    Parameters
+    ----------
+    edges : list
+        List of repository edges containing node information
+    comment_size : int
+        Number of lines to preserve as comments
+    force_cache : bool
+        Flag to force cache recreation
+    loc_add : int, optional
+        Lines of code added counter (default: 0)
+    loc_del : int, optional
+        Lines of code deleted counter (default: 0)
+
+    Returns
+    -------
+    list
+        A list containing:
+        - Total lines added (int)
+        - Total lines deleted (int)
+        - Net change (int)
+        - Cache status (bool)
+
+    Raises
+    ------
+    IOError
+        If there is an issue reading or writing to the file
     """
     cached = True # Assume all repositories are cached
     filename = 'cache/'+hashlib.sha256(USER_NAME.encode('utf-8')).hexdigest()+'.txt' # Create a unique filename for each user
@@ -51,8 +81,21 @@ def cache_builder(edges, comment_size, force_cache, loc_add=0, loc_del=0):
 
 def flush_cache(edges, filename, comment_size):
     """
-    Wipes the cache file
-    This is called when the number of repositories changes or when the file is first created
+    Wipes the cache file and recreates it with fresh data.
+
+    Parameters
+    ----------
+    edges : list
+        List of repository edges containing node information
+    filename : str
+        Path to the cache file
+    comment_size : int
+        Number of lines to preserve as comments
+
+    Raises
+    ------
+    IOError
+        If there is an issue writing to the file
     """
     with open(filename, 'r') as f:
         data = []

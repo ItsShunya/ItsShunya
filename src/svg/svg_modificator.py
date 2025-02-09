@@ -1,8 +1,42 @@
+# The Python Standard Library.
 from lxml import etree
 
 def svg_overwrite(filename, age_data, commit_data, star_data, repo_data, contrib_data, follower_data, loc_data):
     """
-    Parse SVG files and update elements with my age, commits, stars, repositories, and lines written
+    Parse SVG files and update elements with specified data.
+
+    This function reads an SVG file, updates various elements with provided data,
+    and writes the modified content back to the file.
+
+    Parameters
+    ----------
+    filename : str
+        Path to the SVG file to be modified.
+    age_data : int
+        Age data to be displayed.
+    commit_data : int
+        Commit data to be displayed.
+    star_data : int
+        Star data to be displayed.
+    repo_data : int
+        Repository data to be displayed.
+    contrib_data : int
+        Contribution data to be displayed.
+    follower_data : int
+        Follower data to be displayed.
+    loc_data : list of int
+        List containing lines of code data.
+
+    Returns
+    -------
+    None
+
+    Raises
+    ------
+    etree.XMLSyntaxError
+        If the SVG file cannot be parsed.
+    IOError
+        If there is an error writing to the file.
     """
     tree = etree.parse(filename)
     print(tree)
@@ -22,7 +56,31 @@ def svg_overwrite(filename, age_data, commit_data, star_data, repo_data, contrib
 
 def justify_format(root, element_id, new_text, length=0):
     """
-    Updates and formats the text of the element, and modifes the amount of dots in the previous element to justify the new text on the svg
+    Update and format the text of an SVG element, adjusting dot justification.
+
+    This function updates the text of the specified SVG element and modifies
+    the number of dots in a related element to ensure text justification.
+
+    Parameters
+    ----------
+    root : etree.Element
+        The root element of the SVG document.
+    element_id : str
+        The ID of the element to be updated.
+    new_text : int or str
+        The new text to be set. If an integer, it will be formatted with commas.
+    length : int, optional
+        The target length for justification. If the new text is shorter, dots
+        will be added to fill the space (default is 0).
+
+    Returns
+    -------
+    None
+
+    Raises
+    ------
+    ValueError
+        If the element with the specified ID is not found.
     """
     if isinstance(new_text, int):
         new_text = f"{'{:,}'.format(new_text)}"
@@ -38,8 +96,28 @@ def justify_format(root, element_id, new_text, length=0):
 
 def find_and_replace(root, element_id, new_text):
     """
-    Finds the element in the SVG file and replaces its text with a new value
+    Find an SVG element by ID and replace its text content.
+
+    Parameters
+    ----------
+    root : etree.Element
+        The root element of the SVG document.
+    element_id : str
+        The ID of the element to be found and updated.
+    new_text : str
+        The new text content to set.
+
+    Returns
+    -------
+    None
+
+    Raises
+    ------
+    ValueError
+        If the element with the specified ID is not found.
     """
     element = root.find(f".//*[@id='{element_id}']")
     if element is not None:
         element.text = new_text
+    else:
+        raise ValueError(f"Element with ID '{element_id}' not found.")
