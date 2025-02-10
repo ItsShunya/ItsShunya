@@ -43,7 +43,7 @@ def svg_overwrite(filename, age_data, commit_data, star_data, repo_data, contrib
     root = tree.getroot()
 
     justify_format(root, 'commit_data',     commit_data, 22)
-    justify_format(root, 'age_data',        age_data, 48)
+    justify_format(root, 'age_data',        age_data, 49)
     justify_format(root, 'star_data',       star_data, 14)
     justify_format(root, 'repo_data',       repo_data, 7)
     justify_format(root, 'contrib_data',    contrib_data)
@@ -92,6 +92,7 @@ def justify_format(root, element_id, new_text, length=0):
         dot_string = dot_map[just_len]
     else:
         dot_string = ' ' + ('.' * just_len) + ' '
+
     find_and_replace(root, f"{element_id}_dots", dot_string)
 
 def find_and_replace(root, element_id, new_text):
@@ -119,5 +120,5 @@ def find_and_replace(root, element_id, new_text):
     element = root.find(f".//*[@id='{element_id}']")
     if element is not None:
         element.text = new_text
-    else:
-        raise ValueError(f"Element with ID '{element_id}' not found.")
+    #else:
+    #    raise ValueError(f"Element with ID '{element_id}' not found.")
