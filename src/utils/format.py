@@ -1,10 +1,11 @@
+"""Formatting utils, mainly for beautifying strings."""
 
-# The Python Standard Library.
-from typing import Union
 import datetime
 from dateutil import relativedelta
 
-def toPlural(unit: int) -> str:
+def toPlural(
+    unit: int
+) -> str:
     """
     Returns a properly formatted plural suffix based on the input unit.
 
@@ -27,26 +28,44 @@ def toPlural(unit: int) -> str:
     """
     return 's' if unit != 1 else ''
 
-def timeDiffFormatted(query_type: str, difference: float, funct_return: bool = False, whitespace: int = 0) -> Union[str, bool]:
+def timeDiffFormatted(
+    query_type: str,
+    difference: float,
+    funct_return: bool = False,
+    whitespace: int = 0,
+) -> str | bool:
     """
-    Prints a formatted time difference and optionally returns a formatted result.
+    Print a formatted time difference and optionally return a formatted value.
+
+    This function prints a human-readable representation of a time difference,
+    choosing seconds or milliseconds depending on magnitude. Optionally, it
+    returns either a left-aligned formatted string or the value of
+    ``funct_return`` unchanged.
 
     Parameters
     ----------
     query_type : str
-        The type of query for which the time difference is displayed.
+        Label associated with the measured operation, printed as a prefix.
     difference : float
-        The computed time difference to be formatted and displayed.
+        Time difference in seconds.
     funct_return : bool, optional
-        Determines whether to return a formatted string. Default is False.
+        Value to return when ``whitespace`` is zero. Defaults to ``False``.
     whitespace : int, optional
-        The width for left-aligned formatting of the returned string. Default is 0.
+        If non-zero, the return value is a left-aligned string representation
+        of ``funct_return`` padded to this width. Defaults to ``0``.
 
     Returns
     -------
-    Union[str, bool]
-        Returns the formatted time difference string if ``whitespace`` is nonzero,
-        otherwise returns ``funct_return`` unmodified.
+    str | bool
+        If ``whitespace`` is non-zero, returns a formatted string representation
+        of ``funct_return`` padded to ``whitespace`` characters. Otherwise,
+        returns ``funct_return`` unchanged.
+
+    Notes
+    -----
+    - This function always produces console output as a side effect.
+    - Time values greater than 1 second are displayed in seconds; smaller values
+      are displayed in milliseconds.
     """
     print('{:<23}'.format('   ' + query_type + ':'), sep='', end='')
     print('{:>12}'.format('%.4f' % difference + ' s ')) if difference > 1 else print('{:>12}'.format('%.4f' % (difference * 1000) + ' ms'))
@@ -54,14 +73,15 @@ def timeDiffFormatted(query_type: str, difference: float, funct_return: bool = F
         return f"{'{:,}'.format(funct_return): <{whitespace}}"
     return funct_return
 
-def birthdayFormatted(birthday: datetime.datetime) -> str:
+def birthdayFormatted(
+    birthday: datetime.datetime
+) -> str:
     """
-    Returns a formatted string representing the time since the given birthday.
+    Return a formatted string representing the time since the given birthday.
 
-    This function calculates the time elapsed since the provided birthday and returns
-    a human-readable string in the format 'XX years, XX months, XX days'. If the current
-    date matches the birthday (same day and month), a birthday emoji 🎂 is appended to
-    the string.
+    Calculates the time elapsed since the provided birthday and returns a
+    human-readable string in the format ``'XX years, XX months, XX days'``.
+    If today is the birthday (same day and month), a birthday emoji 🎂 is appended.
 
     Parameters
     ----------
@@ -71,11 +91,12 @@ def birthdayFormatted(birthday: datetime.datetime) -> str:
     Returns
     -------
     str
-        A formatted string representing the time elapsed since the birthday.
+        Formatted string representing the time elapsed since the birthday.
 
     Examples
     --------
     >>> from datetime import datetime
+    >>> from dateutil import relativedelta
     >>> birthday = datetime(1990, 5, 15)
     >>> birthdayFormatted(birthday)
     '33 years, 0 months, 0 days 🎂'
@@ -91,3 +112,28 @@ def birthdayFormatted(birthday: datetime.datetime) -> str:
         diff.days, 'day' + toPlural(diff.days),
         ' 🎂' if (diff.months == 0 and diff.days == 0) else ''
     )
+
+def toDotLine(
+    key: str,
+    value: str,
+    width: int = 40
+) -> str:
+    """
+    Create a dot-filled key/value line.
+
+    Parameters
+    ----------
+    key : str
+        Left-hand label.
+    value : str
+        Right-hand value.
+    width : int
+        Total width before value.
+
+    Returns
+    -------
+    str
+        Formatted line.
+    """
+    dots = "." * max(1, width - len(key))
+    return f"{key} {dots} {value}"

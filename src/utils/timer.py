@@ -1,7 +1,13 @@
-# The Python Standard Library.
-import time
+"""Timer utilities."""
 
-def perf_counter(funct, *args):
+import time
+from collections.abc import Callable
+from typing import Any
+
+def perf_counter(
+    funct: Callable[..., Any],
+    *args: tuple | None
+) -> tuple[Any, float]:
     """
     Calculates the execution time of a function and returns both the result and the time taken.
 
@@ -11,7 +17,7 @@ def perf_counter(funct, *args):
     Parameters
     ----------
     funct : callable
-        The function to be timed.
+        The function to be timed. Returns None.
     *args : tuple, optional
         Variable-length arguments to be passed to `funct`.
 
