@@ -42,8 +42,8 @@ if __name__ == '__main__':
     formatter.timeDiffFormatted('account data', user_time)
     age_data, age_time = timer.perf_counter(formatter.birthdayFormatted, BIRTHDAY)
     formatter.timeDiffFormatted('age calculation', age_time)
-    total_loc, loc_time = timer.perf_counter(loc_query, ['OWNER', 'COLLABORATOR', 'ORGANIZATION_MEMBER'], 7)
-    formatter.timeDiffFormatted('LOC (cached)', loc_time) if total_loc[-1] else formatter.timeDiffFormatted('LOC (no cache)', loc_time)
+    #total_loc, loc_time = timer.perf_counter(loc_query, ['OWNER', 'COLLABORATOR', 'ORGANIZATION_MEMBER'], 7)
+    #formatter.timeDiffFormatted('LOC (cached)', loc_time) if total_loc[-1] else formatter.timeDiffFormatted('LOC (no cache)', loc_time)
 
     commit_data, commit_time = timer.perf_counter(commit_counter, 7)
     star_data, star_time = timer.perf_counter(graph_repos_stars, 'stars', ['OWNER'])
@@ -51,14 +51,14 @@ if __name__ == '__main__':
     contrib_data, contrib_time = timer.perf_counter(graph_repos_stars, 'repos', ['OWNER', 'COLLABORATOR', 'ORGANIZATION_MEMBER'])
     follower_data, follower_time = timer.perf_counter(follower_getter, USER_NAME)
 
-    for index in range(len(total_loc)-1): total_loc[index] = '{:,}'.format(total_loc[index]) # format added, deleted, and total LOC
+    #for index in range(len(total_loc)-1): total_loc[index] = '{:,}'.format(total_loc[index]) # format added, deleted, and total LOC
 
-    svg_modificator.svg_overwrite(Path('output/' + 'dark_mode.svg').resolve(), age_data, commit_data, star_data, repo_data, contrib_data, follower_data, total_loc[:-1])
-    svg_modificator.svg_overwrite(Path('output/' + 'light_mode.svg').resolve(), age_data, commit_data, star_data, repo_data, contrib_data, follower_data, total_loc[:-1])
+    svg_modificator.svg_overwrite(Path('output/' + 'dark_mode.svg').resolve(), age_data, commit_data, star_data, repo_data, contrib_data, follower_data, [0,0,0])
+    svg_modificator.svg_overwrite(Path('output/' + 'light_mode.svg').resolve(), age_data, commit_data, star_data, repo_data, contrib_data, follower_data, [0,0,0])
 
     # move cursor to override 'Calculation times:' with 'Total function time:' and the total function time, then move cursor back
     print('\033[F\033[F\033[F\033[F\033[F\033[F\033[F\033[F',
-        '{:<21}'.format('Total function time:'), '{:>11}'.format('%.4f' % (user_time + age_time + loc_time + commit_time + star_time + repo_time + contrib_time)),
+        '{:<21}'.format('Total function time:'), '{:>11}'.format('%.4f' % (user_time + age_time + 0 + commit_time + star_time + repo_time + contrib_time)),
         ' s \033[E\033[E\033[E\033[E\033[E\033[E\033[E\033[E', sep='')
 
     print('Total GitHub GraphQL API calls:', '{:>3}'.format(sum(QUERY_COUNT.values())))
