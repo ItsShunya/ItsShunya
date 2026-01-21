@@ -7,11 +7,13 @@ import os
 # Project's internal modules.
 from cache import cache
 
-HEADERS: Dict[str, str] = {'authorization': 'token ' + os.environ['ACCESS_TOKEN']}
+HEADERS: Dict[str, str] = {'Authorization': 'token ' + os.environ['ACCESS_TOKEN'], 'User-Agent': 'github-profile-stats/1.0'}
 USER_NAME: str = os.environ['USER_NAME']
 OUTPUT_PATH: str = "output/"
 QUERY_COUNT: Dict[str, int] = {'user_getter': 0, 'follower_getter': 0, 'graph_repos_stars': 0, 'recursive_loc': 0, 'graph_commits': 0, 'loc_query': 0}
 OWNER_ID: str = ''
+
+REQUEST_TIMEOUT = (5, 30)  # connect, read
 
 def get_query_count():
     """
@@ -90,7 +92,7 @@ def simple_request(func_name: str, query: str, variables: Dict[str, Union[str, N
     Exception
         If the request fails with a non-200 status code.
     """
-    request = requests.post('https://api.github.com/graphql', json={'query': query, 'variables': variables}, headers=HEADERS)
+    request = requests.post('https://api.github.com/graphql', json={'query': query, 'variables': variables}, headers=HEADERS, timeout=REQUEST_TIMEOUT)
     if request.status_code == 200:
         return request
     raise Exception(func_name, ' has failed with a', request.status_code, request.text, QUERY_COUNT)
@@ -244,7 +246,7 @@ def recursive_loc(owner: str, repo_name: str, data: List[str], cache_comment: Li
         }
     }'''
     variables = {'repo_name': repo_name, 'owner': owner, 'cursor': cursor}
-    request = requests.post('https://api.github.com/graphql', json={'query': query, 'variables':variables}, headers=HEADERS) # I cannot use simple_request(), because I want to save the file before raising Exception
+    request = requests.post('https://api.github.com/graphql', json={'query': query, 'variables':variables}, headers=HEADERS, timeout=REQUEST_TIMEOUT) # I cannot use simple_request(), because I want to save the file before raising Exception
     if request.status_code == 200:
         if request.json()['data']['repository']['defaultBranchRef'] != None: # Only count commits if repo isn't empty
             return loc_counter_one_repo(owner, repo_name, data, cache_comment, request.json()['data']['repository']['defaultBranchRef']['target']['history'], addition_total, deletion_total, my_commits)
@@ -291,7 +293,8 @@ def loc_counter_one_repo(owner: str, repo_name: str, data: List[str], cache_comm
 
     if history['edges'] == [] or not history['pageInfo']['hasNextPage']:
         return addition_total, deletion_total, my_commits
-    else: return recursive_loc(owner, repo_name, data, cache_comment, addition_total, deletion_total, my_commits, history['pageInfo']['endCursor'])
+    else:
+        return recursive_loc(owner, repo_name, data, cache_comment, addition_total, deletion_total, my_commits, history['pageInfo']['endCursor'])
 
 def loc_query(owner_affiliation: List[str], comment_size: int = 0, force_cache: bool = False, cursor: Union[str, None] = None, edges: List = []):
     """
