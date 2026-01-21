@@ -60,7 +60,7 @@ class SvgGenerator:
         style = '''
             <style>
                 .ascii {
-                    font-family: monospace;
+                    font-family: JetBrains Mono, monospace;
                     font-size: 14px;
                     fill: #ffffff;
                 }
@@ -112,13 +112,13 @@ class SvgGenerator:
         str
             The generated text element as an SVG string
         """
-        text_element = f'<text x="{x}" y="{y}" class="{text_class}">'
+        text_element = f'<text x="{x}" y="{y}" class="{text_class}" xml:space="preserve">'
         text_element += f'<tspan>{text}</tspan>'
         text_element += '</text>'
         self.content.append(text_element)
         return text_element
 
-    def create_multiple_tspan(self, x, y, text_lines, text_class="ascii"):
+    def create_multiple_tspan(self, x, y, text_lines, text_class="ascii", line_height = 18):
         """
         Create a text element with multiple tspan elements for multi-line text.
 
@@ -138,9 +138,12 @@ class SvgGenerator:
         str
             The generated text element with multiple tspan as an SVG string
         """
-        text_element = f'<text x="{x}" y="{y}" class="{text_class}">'
-        for line in text_lines:
-            text_element += f'<tspan>{line}</tspan>'
+        text_element = f'<text x="{x}" y="{y}" class="{text_class}" xml:space="preserve">'
+
+        for i, line in enumerate(text_lines):
+            dy = 0 if i == 0 else line_height
+            text_element += f'<tspan x="{x}" dy="{dy}">{line}</tspan>\n'
+
         text_element += '</text>'
         self.content.append(text_element)
         return text_element

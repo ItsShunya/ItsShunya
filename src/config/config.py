@@ -16,18 +16,18 @@ class User:
         The username of the user.
     birthday : datetime
         The user's date of birth.
-    operative_system : list[str], optional
-        List of operating systems the user is using.
+    operative_system : str, optional
+        Operating system the user is using.
     position : str | None, optional
         The user's position or role (if applicable).
-    ide : list[str], optional
-        List of IDEs the user is using.
+    ide : str | None, optional
+        IDE used by the user
     """
     username:           str
     birthday:           datetime
-    operative_system:   list[str]  = field(default_factory=list)
+    operative_system:   str | None = None
     position:           str | None = None
-    ide:                list[str]  = field(default_factory = list)
+    ide:                str | None = None
 
 @dataclass
 class Languages:
