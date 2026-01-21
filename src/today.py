@@ -3,7 +3,7 @@ import datetime
 from pathlib import Path
 
 # Internal Python modules.
-from utils import formatter, timer
+from utils import timer, format
 from graphql.github import *
 from svg import svg_modificator
 from config import environment, config
@@ -40,9 +40,9 @@ if __name__ == '__main__':
     user_data, user_time = timer.perf_counter(user_getter, USER_NAME)
     OWNER_ID, acc_date = user_data
     set_owner_id(OWNER_ID)
-    formatter.timeDiffFormatted('account data', user_time)
-    age_data, age_time = timer.perf_counter(formatter.birthdayFormatted, BIRTHDAY)
-    formatter.timeDiffFormatted('age calculation', age_time)
+    format.timeDiffFormatted('account data', user_time)
+    age_data, age_time = timer.perf_counter(format.birthdayFormatted, BIRTHDAY)
+    format.timeDiffFormatted('age calculation', age_time)
     #total_loc, loc_time = timer.perf_counter(loc_query, ['OWNER', 'COLLABORATOR', 'ORGANIZATION_MEMBER'], 7)
     #formatter.timeDiffFormatted('LOC (cached)', loc_time) if total_loc[-1] else formatter.timeDiffFormatted('LOC (no cache)', loc_time)
 
