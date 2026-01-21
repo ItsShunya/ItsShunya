@@ -1,10 +1,9 @@
-# The Python Standard Library.
-from typing import Optional, Dict, Literal
+"""Environment configuration module using pydantic-settings for validation and loading."""
 
-# External project dependencies.
+from typing import Literal
+
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
 
 EnvType = Literal["development", "production"]
 
@@ -20,9 +19,15 @@ class EnvConfig(BaseSettings):
     Validation is performed at initialization time.
     """
 
-    ACCESS_TOKEN: str = Field(..., description="Authentication token for API access")
-    USER_NAME: str = Field(..., description="GitHub username or application identifier")
-    OUTPUT_PATH: Optional[str] = Field(
+    ACCESS_TOKEN: str = Field(
+        ...,
+        description="Authentication token for API access",
+    )
+    USER_NAME: str = Field(
+        ...,
+        description="GitHub username or application identifier",
+    )
+    OUTPUT_PATH: str | None = Field(
         default=None,
         description="Path where application output will be stored",
     )
@@ -44,19 +49,25 @@ class EnvConfig(BaseSettings):
 
         This is the preferred constructor for application code.
 
-        Returns:
-            EnvConfig: Initialized and validated configuration instance.
+        Returns
+        -------
+        EnvConfig
+            Initialized and validated configuration instance.
 
-        Raises:
-            ValidationError: If required configuration values are missing or invalid.
+        Raises
+        ------
+        ValidationError
+            If required configuration values are missing or invalid.
         """
         return cls()
 
-    def to_dict(self) -> Dict[str, Optional[str]]:
+    def to_dict(self) -> dict[str, str | None]:
         """
         Convert the configuration to a dictionary.
 
-        Returns:
-            Dict[str, Optional[str]]: Dictionary representation of the configuration.
+        Returns
+        -------
+        dict[str, str | None]
+            Dictionary representation of the configuration.
         """
         return self.model_dump()

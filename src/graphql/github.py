@@ -1,35 +1,49 @@
-# The Python Standard Library.
-from typing import List, Dict, Union, Tuple
+"""GitHub API query module for fetching user statistics and repository data."""
+
 import hashlib
 import requests
-import os
 
-# Project's internal modules.
+from typing import Any
+
 from cache import cache
 from config.environment import EnvConfig
 
 env = EnvConfig.from_env()
 
-HEADERS: Dict[str, str] = {'Authorization': 'token ' + env.ACCESS_TOKEN, 'User-Agent': 'github-profile-stats/1.0'}
+HEADERS: dict[str, str] = {
+    'Authorization': 'token ' + env.ACCESS_TOKEN,
+    'User-Agent': 'github-profile-stats/1.0'
+}
 USER_NAME: str = env.USER_NAME
 OUTPUT_PATH: str = "output/"
-QUERY_COUNT: Dict[str, int] = {'user_getter': 0, 'follower_getter': 0, 'graph_repos_stars': 0, 'recursive_loc': 0, 'graph_commits': 0, 'loc_query': 0}
+QUERY_COUNT: dict[str, int] = {
+    'user_getter': 0,
+    'follower_getter': 0,
+    'graph_repos_stars': 0,
+    'recursive_loc': 0,
+    'graph_commits': 0,
+    'loc_query': 0
+}
 OWNER_ID: str = ''
 
-REQUEST_TIMEOUT = (5, 30)  # connect, read
+REQUEST_TIMEOUT: tuple[int, int] = (5, 30)  # connect, read
 
-def get_query_count():
+
+def get_query_count() -> dict[str, int]:
     """
     Returns the current count of GitHub GraphQL API queries made.
 
     Returns
     -------
-    Dict[str, int]
+    dict[str, int]
         Dictionary containing the count of each type of query made.
     """
     return QUERY_COUNT
 
-def set_owner_id(new_OWNER_ID: str):
+
+def set_owner_id(
+    new_OWNER_ID: str,
+) -> None:
     """
     Sets the global OWNER_ID variable to the specified user ID.
 
@@ -41,7 +55,10 @@ def set_owner_id(new_OWNER_ID: str):
     global OWNER_ID
     OWNER_ID = new_OWNER_ID
 
-def query_count(funct_id: str):
+
+def query_count(
+    funct_id: str,
+) -> None:
     """
     Increments the count of the specified query type in the QUERY_COUNT dictionary.
 
@@ -53,7 +70,11 @@ def query_count(funct_id: str):
     global QUERY_COUNT
     QUERY_COUNT[funct_id] += 1
 
-def force_close_file(data: List[str], cache_comment: List[str]):
+
+def force_close_file(
+    data: list[str],
+    cache_comment: list[str],
+) -> None:
     """
     Forces the cache file to close, preserving the data written to it.
 
@@ -61,9 +82,9 @@ def force_close_file(data: List[str], cache_comment: List[str]):
 
     Parameters
     ----------
-    data : List[str]
+    data : list[str]
         The data to write to the file.
-    cache_comment : List[str]
+    cache_comment : list[str]
         The comment block to prepend to the data.
     """
     filename = 'cache/' + hashlib.sha256(USER_NAME.encode('utf-8')).hexdigest() + '.txt'
@@ -72,7 +93,12 @@ def force_close_file(data: List[str], cache_comment: List[str]):
         f.writelines(data)
     print('There was an error while writing to the cache file. The file,', filename, 'has had the partial data saved and closed.')
 
-def simple_request(func_name: str, query: str, variables: Dict[str, Union[str, None]]) -> requests.Response:
+
+def simple_request(
+    func_name: str,
+    query: str,
+    variables: dict[str, str | None],
+) -> requests.Response:
     """
     Sends a GraphQL request to the GitHub API and returns the response.
 
@@ -82,7 +108,7 @@ def simple_request(func_name: str, query: str, variables: Dict[str, Union[str, N
         The name of the calling function.
     query : str
         The GraphQL query to send.
-    variables : Dict[str, Union[str, None]]
+    variables : dict[str, str | None]
         The variables to include with the query.
 
     Returns
@@ -95,12 +121,21 @@ def simple_request(func_name: str, query: str, variables: Dict[str, Union[str, N
     Exception
         If the request fails with a non-200 status code.
     """
-    request = requests.post('https://api.github.com/graphql', json={'query': query, 'variables': variables}, headers=HEADERS, timeout=REQUEST_TIMEOUT)
+    request = requests.post(
+        'https://api.github.com/graphql',
+        json={'query': query, 'variables': variables},
+        headers=HEADERS,
+        timeout=REQUEST_TIMEOUT
+    )
     if request.status_code == 200:
         return request
     raise Exception(func_name, ' has failed with a', request.status_code, request.text, QUERY_COUNT)
 
-def graph_commits(start_date: str, end_date: str) -> int:
+
+def graph_commits(
+    start_date: str,
+    end_date: str,
+) -> int:
     """
     Returns the total commit count for the specified date range.
 
@@ -131,9 +166,14 @@ def graph_commits(start_date: str, end_date: str) -> int:
     request = simple_request(graph_commits.__name__, query, variables)
     return int(request.json()['data']['user']['contributionsCollection']['contributionCalendar']['totalContributions'])
 
+
 def graph_repos_stars(
-    count_type: str, owner_affiliation: List[str], cursor: Union[str, None] = None, add_loc: int = 0, del_loc: int = 0
-) -> Union[int, None]:
+    count_type: str,
+    owner_affiliation: list[str],
+    cursor: str | None = None,
+    add_loc: int = 0,
+    del_loc: int = 0,
+) -> int | None:
     """
     Uses GitHub's GraphQL v4 API to return the total repository count, stars, or LOC count.
 
@@ -141,9 +181,9 @@ def graph_repos_stars(
     ----------
     count_type : str
         The type of count to perform ('repos', 'stars', or 'loc').
-    owner_affiliation : List[str]
+    owner_affiliation : list[str]
         List of repository affiliations to consider.
-    cursor : Union[str, None], optional
+    cursor : str | None, optional
         Cursor for pagination (default: None).
     add_loc : int, optional
         Lines of code added counter (default: 0).
@@ -152,7 +192,7 @@ def graph_repos_stars(
 
     Returns
     -------
-    Union[int, None]
+    int | None
         The total count of repositories, stars, or LOC, or None if the count type is invalid.
     """
     query_count('graph_repos_stars')
@@ -187,7 +227,17 @@ def graph_repos_stars(
             return stars_counter(request.json()['data']['user']['repositories']['edges'])
     return None
 
-def recursive_loc(owner: str, repo_name: str, data: List[str], cache_comment: List[str], addition_total: int = 0, deletion_total: int = 0, my_commits: int = 0, cursor: Union[str, None] = None) -> Union[Tuple[int, int, int], None]:
+
+def recursive_loc(
+    owner: str,
+    repo_name: str,
+    data: list[str],
+    cache_comment: list[str],
+    addition_total: int = 0,
+    deletion_total: int = 0,
+    my_commits: int = 0,
+    cursor: str | None = None,
+) -> tuple[int, int, int] | None:
     """
     Uses GitHub's GraphQL v4 API and cursor pagination to fetch 100 commits from a repository at a time.
 
@@ -197,9 +247,9 @@ def recursive_loc(owner: str, repo_name: str, data: List[str], cache_comment: Li
         The owner of the repository.
     repo_name : str
         The name of the repository.
-    data : List[str]
+    data : list[str]
         The data being processed.
-    cache_comment : List[str]
+    cache_comment : list[str]
         The comment block to prepend to the data.
     addition_total : int, optional
         Lines of code added counter (default: 0).
@@ -207,12 +257,12 @@ def recursive_loc(owner: str, repo_name: str, data: List[str], cache_comment: Li
         Lines of code deleted counter (default: 0).
     my_commits : int, optional
         Number of commits authored by the user (default: 0).
-    cursor : Union[str, None], optional
+    cursor : str | None, optional
         Cursor for pagination (default: None).
 
     Returns
     -------
-    Union[Tuple[int, int, int], None]
+    tuple[int, int, int] | None
         A tuple containing the total additions, deletions, and commits authored by the user, or None if the request fails.
     """
     query_count('recursive_loc')
@@ -249,18 +299,43 @@ def recursive_loc(owner: str, repo_name: str, data: List[str], cache_comment: Li
         }
     }'''
     variables = {'repo_name': repo_name, 'owner': owner, 'cursor': cursor}
-    request = requests.post('https://api.github.com/graphql', json={'query': query, 'variables':variables}, headers=HEADERS, timeout=REQUEST_TIMEOUT) # I cannot use simple_request(), because I want to save the file before raising Exception
+    request = requests.post(
+        'https://api.github.com/graphql',
+        json={'query': query, 'variables': variables},
+        headers=HEADERS,
+        timeout=REQUEST_TIMEOUT
+    )
     if request.status_code == 200:
-        if request.json()['data']['repository']['defaultBranchRef'] != None: # Only count commits if repo isn't empty
-            return loc_counter_one_repo(owner, repo_name, data, cache_comment, request.json()['data']['repository']['defaultBranchRef']['target']['history'], addition_total, deletion_total, my_commits)
-        else: return 0
-    force_close_file(data, cache_comment) # saves what is currently in the file before this program crashes
+        if request.json()['data']['repository']['defaultBranchRef'] is not None:
+            return loc_counter_one_repo(
+                owner,
+                repo_name,
+                data,
+                cache_comment,
+                request.json()['data']['repository']['defaultBranchRef']['target']['history'],
+                addition_total,
+                deletion_total,
+                my_commits
+            )
+        else:
+            return 0
+
+    force_close_file(data, cache_comment)
     if request.status_code == 403:
         raise Exception('Too many requests in a short amount of time!\nYou\'ve hit the non-documented anti-abuse limit!')
     raise Exception('recursive_loc() has failed with a', request.status_code, request.text, QUERY_COUNT)
 
 
-def loc_counter_one_repo(owner: str, repo_name: str, data: List[str], cache_comment: List[str], history: Dict[str, Union[List[Dict[str, Union[str, int]]], Dict[str, Union[str, bool]]]], addition_total: int, deletion_total: int, my_commits: int) -> Tuple[int, int, int]:
+def loc_counter_one_repo(
+    owner: str,
+    repo_name: str,
+    data: list[str],
+    cache_comment: list[str],
+    history: dict[str, Any],
+    addition_total: int,
+    deletion_total: int,
+    my_commits: int,
+) -> tuple[int, int, int]:
     """
     Recursively calls recursive_loc to fetch commit history and calculate LOC statistics.
 
@@ -270,11 +345,11 @@ def loc_counter_one_repo(owner: str, repo_name: str, data: List[str], cache_comm
         The owner of the repository.
     repo_name : str
         The name of the repository.
-    data : List[str]
+    data : list[str]
         The data being processed.
-    cache_comment : List[str]
+    cache_comment : list[str]
         The comment block to prepend to the data.
-    history : Dict[str, Union[List[Dict[str, Union[str, int]]], Dict[str, Union[str, bool]]]]
+    history : dict[str, Any]
         The commit history data.
     addition_total : int
         Lines of code added counter.
@@ -285,7 +360,7 @@ def loc_counter_one_repo(owner: str, repo_name: str, data: List[str], cache_comm
 
     Returns
     -------
-    Tuple[int, int, int]
+    tuple[int, int, int]
         A tuple containing the total additions, deletions, and commits authored by the user.
     """
     for node in history['edges']:
@@ -297,26 +372,43 @@ def loc_counter_one_repo(owner: str, repo_name: str, data: List[str], cache_comm
     if history['edges'] == [] or not history['pageInfo']['hasNextPage']:
         return addition_total, deletion_total, my_commits
     else:
-        return recursive_loc(owner, repo_name, data, cache_comment, addition_total, deletion_total, my_commits, history['pageInfo']['endCursor'])
+        return recursive_loc(
+            owner,
+            repo_name,
+            data,
+            cache_comment,
+            addition_total,
+            deletion_total,
+            my_commits,
+            history['pageInfo']['endCursor']
+        )
 
-def loc_query(owner_affiliation: List[str], comment_size: int = 0, force_cache: bool = False, cursor: Union[str, None] = None, edges: List = []):
+
+def loc_query(
+    owner_affiliation: list[str],
+    comment_size: int = 0,
+    force_cache: bool = False,
+    cursor: str | None = None,
+    edges: list = [],
+) -> Any:
     """
-    Uses GitHub's GraphQL v4 API to query all the repositories I have access to (with respect to owner_affiliation)
+    Uses GitHub's GraphQL v4 API to query all the repositories I have access to (with respect to owner_affiliation).
+
     Queries 60 repos at a time, because larger queries give a 502 timeout error and smaller queries send too many
     requests and also give a 502 error.
-    Returns the total number of lines of code in all repositories
+    Returns the total number of lines of code in all repositories.
 
     Parameters
     ----------
-    owner_affiliation : List[str]
+    owner_affiliation : list[str]
         List of repository affiliations to consider.
     comment_size : int, optional
         Number of lines to preserve as comments (default: 0).
     force_cache : bool, optional
         Flag to force cache recreation (default: False).
-    cursor : Union[str, None], optional
+    cursor : str | None, optional
         Cursor for pagination (default: None).
-    edges : List, optional
+    edges : list, optional
         List of repository edges (default: []).
 
     Returns
@@ -354,13 +446,24 @@ def loc_query(owner_affiliation: List[str], comment_size: int = 0, force_cache: 
     }'''
     variables = {'owner_affiliation': owner_affiliation, 'login': USER_NAME, 'cursor': cursor}
     request = simple_request(loc_query.__name__, query, variables)
-    if request.json()['data']['user']['repositories']['pageInfo']['hasNextPage']:   # If repository data has another page
-        edges += request.json()['data']['user']['repositories']['edges']            # Add on to the LoC count
-        return loc_query(owner_affiliation, comment_size, force_cache, request.json()['data']['user']['repositories']['pageInfo']['endCursor'], edges)
+    if request.json()['data']['user']['repositories']['pageInfo']['hasNextPage']:
+        edges += request.json()['data']['user']['repositories']['edges']
+        return loc_query(
+            owner_affiliation,
+            comment_size,
+            force_cache,
+            request.json()['data']['user']['repositories']['pageInfo']['endCursor'],
+            edges
+        )
     else:
-        return cache.cache_builder(edges + request.json()['data']['user']['repositories']['edges'], comment_size, force_cache)
+        return cache.cache_builder(
+            edges + request.json()['data']['user']['repositories']['edges'],
+            comment_size,
+            force_cache
+        )
 
-def add_archive():
+
+def add_archive() -> list[int]:
     """
     Adds statistics for archived repositories that have been deleted.
 
@@ -369,7 +472,7 @@ def add_archive():
 
     Returns
     -------
-    list
+    list[int]
         A list containing:
         - added_loc : int
             Total lines of code added
@@ -385,18 +488,22 @@ def add_archive():
     with open('cache/repository_archive.txt', 'r') as f:
         data = f.readlines()
     old_data = data
-    data = data[7:len(data)-3] # remove the comment block
+    data = data[7:len(data)-3]
     added_loc, deleted_loc, added_commits = 0, 0, 0
     contributed_repos = len(data)
     for line in data:
         repo_hash, total_commits, my_commits, *loc = line.split()
         added_loc += int(loc[0])
         deleted_loc += int(loc[1])
-        if (my_commits.isdigit()): added_commits += int(my_commits)
+        if my_commits.isdigit():
+            added_commits += int(my_commits)
     added_commits += int(old_data[-1].split()[4][:-1])
     return [added_loc, deleted_loc, added_loc - deleted_loc, added_commits, contributed_repos]
 
-def stars_counter(data):
+
+def stars_counter(
+    data: list,
+) -> int:
     """
     Counts total stars in repositories owned by the user.
 
@@ -411,10 +518,14 @@ def stars_counter(data):
         Total number of stars across all repositories
     """
     total_stars = 0
-    for node in data: total_stars += node['node']['stargazers']['totalCount']
+    for node in data:
+        total_stars += node['node']['stargazers']['totalCount']
     return total_stars
 
-def commit_counter(comment_size):
+
+def commit_counter(
+    comment_size: int,
+) -> int:
     """
     Counts total commits using cached repository data.
 
@@ -429,7 +540,7 @@ def commit_counter(comment_size):
         Total number of commits
     """
     total_commits = 0
-    filename = 'cache/'+hashlib.sha256(USER_NAME.encode('utf-8')).hexdigest()+'.txt'
+    filename = 'cache/' + hashlib.sha256(USER_NAME.encode('utf-8')).hexdigest() + '.txt'
     with open(filename, 'r') as f:
         data = f.readlines()
     cache_comment = data[:comment_size]
@@ -438,7 +549,10 @@ def commit_counter(comment_size):
         total_commits += int(line.split()[2])
     return total_commits
 
-def user_getter(username):
+
+def user_getter(
+    username: str,
+) -> tuple[dict[str, str], str]:
     """
     Retrieves user account information.
 
@@ -449,9 +563,9 @@ def user_getter(username):
 
     Returns
     -------
-    tuple
+    tuple[dict[str, str], str]
         A tuple containing:
-        - dict
+        - dict[str, str]
             User ID information with keys:
             - id : str
                 User's GitHub ID
@@ -477,7 +591,10 @@ def user_getter(username):
     request = simple_request(user_getter.__name__, query, variables)
     return {'id': request.json()['data']['user']['id']}, request.json()['data']['user']['createdAt']
 
-def follower_getter(username):
+
+def follower_getter(
+    username: str,
+) -> int:
     """
     Gets the number of followers for a GitHub user.
 

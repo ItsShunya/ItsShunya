@@ -1,5 +1,12 @@
+"""SVG generator module for creating SVG documents with text elements and styling."""
+
+
 class SvgGenerator:
-    def __init__(self, width=1000, height=600):
+    def __init__(
+        self,
+        width: int = 1000,
+        height: int = 600,
+    ) -> None:
         """
         Initialize the SVG generator with specified dimensions.
 
@@ -10,12 +17,12 @@ class SvgGenerator:
         height : int, optional
             Height of the SVG canvas in pixels (default is 600)
         """
-        self.width = width
-        self.height = height
-        self.content = []
+        self.width: int = width
+        self.height: int = height
+        self.content: list[str] = []
         self._init_svg()
 
-    def _init_svg(self):
+    def _init_svg(self) -> None:
         """
         Initialize the SVG file with header and basic structure.
 
@@ -28,7 +35,7 @@ class SvgGenerator:
         self._create_style_tag()
         self._create_rect_tag()
 
-    def _set_xml_header(self):
+    def _set_xml_header(self) -> None:
         """
         Set the XML header for the SVG document.
 
@@ -38,7 +45,7 @@ class SvgGenerator:
         """
         self.content.append('<?xml version="1.0" encoding="UTF-8"?>')
 
-    def _create_svg_tag(self):
+    def _create_svg_tag(self) -> None:
         """
         Create the SVG root tag with specified dimensions.
 
@@ -49,7 +56,7 @@ class SvgGenerator:
         svg_tag = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {self.width} {self.height}">'
         self.content.append(svg_tag)
 
-    def _create_style_tag(self):
+    def _create_style_tag(self) -> None:
         """
         Create the style tag with CSS for styling elements.
 
@@ -57,8 +64,7 @@ class SvgGenerator:
         -------
         None
         """
-        style = '''
-            <style>
+        style = '''<style>
                 .ascii {
                     font-family: JetBrains Mono, monospace;
                     font-size: 14px;
@@ -77,11 +83,10 @@ class SvgGenerator:
                 .cc {
                     fill: #333333;
                 }
-            </style>
-        '''
-        self.content.append(style.strip())
+            </style>'''
+        self.content.append(style)
 
-    def _create_rect_tag(self):
+    def _create_rect_tag(self) -> None:
         """
         Create a background rectangle covering the entire canvas.
 
@@ -89,10 +94,15 @@ class SvgGenerator:
         -------
         None
         """
-        rect_tag = '<rect width="100%" height="100%" fill="#1a1a1a"/>'
-        self.content.append(rect_tag)
+        self.content.append('<rect width="100%" height="100%" fill="#1a1a1a"/>')
 
-    def create_text_element(self, x, y, text, text_class="ascii"):
+    def create_text_element(
+        self,
+        x: int | float,
+        y: int | float,
+        text: str,
+        text_class: str = "ascii",
+    ) -> str:
         """
         Create a text element with tspan for SVG rendering.
 
@@ -112,13 +122,22 @@ class SvgGenerator:
         str
             The generated text element as an SVG string
         """
-        text_element = f'<text x="{x}" y="{y}" class="{text_class}" xml:space="preserve">'
-        text_element += f'<tspan>{text}</tspan>'
-        text_element += '</text>'
+        text_element = (
+            f'<text x="{x}" y="{y}" class="{text_class}" xml:space="preserve">'
+            f'<tspan>{text}</tspan>'
+            f'</text>'
+        )
         self.content.append(text_element)
         return text_element
 
-    def create_multiple_tspan(self, x, y, text_lines, text_class="ascii", line_height = 18):
+    def create_multiple_tspan(
+        self,
+        x: int | float,
+        y: int | float,
+        text_lines: list[str],
+        text_class: str = "ascii",
+        line_height: int = 18,
+    ) -> str:
         """
         Create a text element with multiple tspan elements for multi-line text.
 
@@ -132,6 +151,8 @@ class SvgGenerator:
             List of text lines to display
         text_class : str, optional
             CSS class for styling the text (default is "ascii")
+        line_height : int, optional
+            Vertical spacing between lines in pixels (default is 18)
 
         Returns
         -------
@@ -148,7 +169,10 @@ class SvgGenerator:
         self.content.append(text_element)
         return text_element
 
-    def save(self, filename="output.svg"):
+    def save(
+        self,
+        filename: str = "output.svg",
+    ) -> None:
         """
         Save the SVG content to a file.
 
@@ -168,4 +192,4 @@ class SvgGenerator:
         """
         with open(filename, 'w') as f:
             f.write('\n'.join(self.content))
-            f.write('</svg>')
+            f.write('\n</svg>')

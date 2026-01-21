@@ -1,9 +1,10 @@
-# The Python Standard Library.
+"""Configuration parser module for user data using dataclasses and YAML."""
+
 from datetime import datetime
 from dataclasses import dataclass, field
 
-# External project dependencies.
 from dataclass_wizard import YAMLWizard
+
 
 @dataclass
 class User:
@@ -16,18 +17,20 @@ class User:
         The username of the user.
     birthday : datetime
         The user's date of birth.
-    operative_system : str, optional
+    operative_system : str | None, optional
         Operating system the user is using.
     position : str | None, optional
         The user's position or role (if applicable).
     ide : str | None, optional
-        IDE used by the user
+        IDE used by the user.
     """
-    username:           str
-    birthday:           datetime
-    operative_system:   str | None = None
-    position:           str | None = None
-    ide:                str | None = None
+
+    username: str
+    birthday: datetime
+    operative_system: str | None = None
+    position: str | None = None
+    ide: str | None = None
+
 
 @dataclass
 class Languages:
@@ -43,9 +46,11 @@ class Languages:
     real : list[str], optional
         List of real-world languages the user speaks.
     """
-    programming:    list[str] = field(default_factory = list)
-    other:          list[str] = field(default_factory = list)
-    real:           list[str] = field(default_factory = list)
+
+    programming: list[str] = field(default_factory=list)
+    other: list[str] = field(default_factory=list)
+    real: list[str] = field(default_factory=list)
+
 
 @dataclass
 class Activities:
@@ -61,9 +66,11 @@ class Activities:
     other : list[str], optional
         List of other activities the user is involved in.
     """
-    software:       list[str] = field(default_factory = list)
-    hardware:       list[str] = field(default_factory = list)
-    other:          list[str] = field(default_factory = list)
+
+    software: list[str] = field(default_factory=list)
+    hardware: list[str] = field(default_factory=list)
+    other: list[str] = field(default_factory=list)
+
 
 @dataclass
 class Contact:
@@ -83,11 +90,13 @@ class Contact:
     stackoverflow : str | None, optional
         User's Stack Overflow profile URL (if applicable).
     """
-    personal_mail:  str | None = None
-    work_mail:      str | None = None
-    linkedin:       str | None = None
-    discord:        str | None = None
-    stackoverflow:  str | None = None
+
+    personal_mail: str | None = None
+    work_mail: str | None = None
+    linkedin: str | None = None
+    discord: str | None = None
+    stackoverflow: str | None = None
+
 
 @dataclass
 class ConfigParser(YAMLWizard):
@@ -107,7 +116,8 @@ class ConfigParser(YAMLWizard):
     contact : Contact
         User's contact information.
     """
-    user:       User
-    languages:  Languages
+
+    user: User
+    languages: Languages
     activities: Activities
-    contact:    Contact
+    contact: Contact
