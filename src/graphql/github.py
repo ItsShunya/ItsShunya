@@ -6,9 +6,12 @@ import os
 
 # Project's internal modules.
 from cache import cache
+from config.environment import EnvConfig
 
-HEADERS: Dict[str, str] = {'Authorization': 'token ' + os.environ['ACCESS_TOKEN'], 'User-Agent': 'github-profile-stats/1.0'}
-USER_NAME: str = os.environ['USER_NAME']
+env = EnvConfig.from_env()
+
+HEADERS: Dict[str, str] = {'Authorization': 'token ' + env.ACCESS_TOKEN, 'User-Agent': 'github-profile-stats/1.0'}
+USER_NAME: str = env.USER_NAME
 OUTPUT_PATH: str = "output/"
 QUERY_COUNT: Dict[str, int] = {'user_getter': 0, 'follower_getter': 0, 'graph_repos_stars': 0, 'recursive_loc': 0, 'graph_commits': 0, 'loc_query': 0}
 OWNER_ID: str = ''
@@ -469,6 +472,8 @@ def user_getter(username):
         }
     }'''
     variables = {'login': username}
+    print(env)
+    print(env.ACCESS_TOKEN)
     request = simple_request(user_getter.__name__, query, variables)
     return {'id': request.json()['data']['user']['id']}, request.json()['data']['user']['createdAt']
 

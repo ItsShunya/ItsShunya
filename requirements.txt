@@ -3,5 +3,4 @@ requests
 lxml
 pyyaml
 dataclass-wizard
-pytz
-tzdata
+pydantic-settings

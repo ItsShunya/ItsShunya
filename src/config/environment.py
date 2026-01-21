@@ -1,70 +1,62 @@
 # The Python Standard Library.
-import os
-from typing import Optional
-from dataclasses import dataclass
+from typing import Optional, Dict, Literal
 
 # External project dependencies.
-from dataclass_wizard import EnvWizard
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
-@dataclass
-class EnvConfig(EnvWizard):
+
+EnvType = Literal["development", "production"]
+
+
+class EnvConfig(BaseSettings):
     """
-    Manages environment variables for the application using EnvWizard.
+    Environment configuration handler using pydantic-settings.
 
-    Automatically handles loading from .env files and system environment variables.
+    Configuration values are loaded automatically from:
+    - Environment variables
+    - `.env` file (if present)
 
-    Attributes
-    ----------
-    ACCESS_TOKEN : Optional[str]
-        Authentication token for API access
-    USER_NAME : Optional[str]
-        Username for application-specific identification
-    OUTPUT_PATH : Optional[str]
-        Path where application output will be stored
-    ENV : str
-        Environment mode (default: "production")
+    Validation is performed at initialization time.
     """
-    ACCESS_TOKEN: Optional[str] = None
-    USER_NAME: Optional[str] = None
-    OUTPUT_PATH: Optional[str] = None
-    ENV: str = "production"  # Default to production
 
-    def __post_init__(self):
+    ACCESS_TOKEN: str = Field(..., description="Authentication token for API access")
+    USER_NAME: str = Field(..., description="GitHub username or application identifier")
+    OUTPUT_PATH: Optional[str] = Field(
+        default=None,
+        description="Path where application output will be stored",
+    )
+    ENV: EnvType = Field(
+        default="production",
+        description="Runtime environment",
+    )
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+    @classmethod
+    def from_env(cls) -> "EnvConfig":
         """
-        Post-initialization method to perform additional validations and setup.
+        Create an EnvConfig instance from environment variables.
 
-        Performs the following actions:
-        - Checks if environment is set to development
-        - Loads environment variables from .env file if in development mode
+        This is the preferred constructor for application code.
+
+        Returns:
+            EnvConfig: Initialized and validated configuration instance.
+
+        Raises:
+            ValidationError: If required configuration values are missing or invalid.
         """
-        # Automatically load .env file if in development mode
-        if self.ENV.lower() == "development":
-            self._load_env_vars()
+        return cls()
 
-    def _load_env_vars(self):
-        """
-        Load environment variables from .env file and override system variables.
-
-        Notes
-        -----
-        - This method is intended for internal use during development.
-        - Some variables (BIRTHDAY, ENV) are currently commented out in the .env loading process
-        """
-        from dotenv import load_dotenv # External project dependencies.
-        load_dotenv()
-        self.ACCESS_TOKEN = os.getenv('ACCESS_TOKEN', self.ACCESS_TOKEN)
-        self.USER_NAME = os.getenv('USER_NAME', self.USER_NAME)
-        self.OUTPUT_PATH = os.getenv('OUTPUT_PATH', self.OUTPUT_PATH)
-        #self.BIRTHDAY = os.getenv('BIRTHDAY', self.BIRTHDAY)
-        #self.ENV = os.getenv('ENV', self.ENV)
-
-    def to_dict(self):
+    def to_dict(self) -> Dict[str, Optional[str]]:
         """
         Convert the configuration to a dictionary.
 
-        Returns
-        -------
-        dict
-            Dictionary representation of the configuration
+        Returns:
+            Dict[str, Optional[str]]: Dictionary representation of the configuration.
         """
-        return self.__dict__
+        return self.model_dump()

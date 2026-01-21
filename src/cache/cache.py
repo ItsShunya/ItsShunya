@@ -4,8 +4,11 @@ import os
 
 # Project's internal modules.
 from graphql import github
+from config.environment import EnvConfig
 
-USER_NAME: str = os.environ['USER_NAME']
+env = EnvConfig.from_env()
+
+USER_NAME: str = env.USER_NAME
 
 def cache_builder(edges, comment_size, force_cache, loc_add=0, loc_del=0):
     """

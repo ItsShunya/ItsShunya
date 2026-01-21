@@ -17,10 +17,11 @@ if __name__ == '__main__':
     """
     """
     # Set up environment variables.
-    env = environment.EnvConfig(ENV = 'production') # Change to ENV = 'development' if running locally.
+    env = environment.EnvConfig.from_env()
     USER_NAME: str = env.USER_NAME
     OUTPUT_PATH: str = env.OUTPUT_PATH
 
+    print(env)
     # Set up configuration variables.
     conf = config.ConfigParser.from_yaml_file('config/' + USER_NAME + '.yaml')
 
