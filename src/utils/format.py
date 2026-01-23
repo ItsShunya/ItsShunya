@@ -116,24 +116,32 @@ def birthdayFormatted(
 def toDotLine(
     key: str,
     value: str,
-    width: int = 40
-) -> str:
+    total_width: int = 50,
+) -> list[tuple[str, str]]:
     """
-    Create a dot-filled key/value line.
+    Format a key-value pair with colored dots for terminal-style display.
 
     Parameters
     ----------
     key : str
-        Left-hand label.
+        The label/key text
     value : str
-        Right-hand value.
-    width : int
-        Total width before value.
+        The value text
+    total_width : int, optional
+        Total width of the line (default is 50)
 
     Returns
     -------
-    str
-        Formatted line.
+    list[tuple[str, str]]
+        List of (text, class) tuples for multi-colored rendering
     """
-    dots = "." * max(1, width - len(key))
-    return f"{key} {dots} {value}"
+    dots_needed = max(1, total_width - len(key) - len(value) - 2)
+    dots = "." * dots_needed
+
+    return [
+        (key, "key"),
+        (" ", "cc"),
+        (dots, "separator"),
+        (" ", "cc"),
+        (value, "value"),
+    ]

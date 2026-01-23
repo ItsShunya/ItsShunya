@@ -39,6 +39,14 @@ class ColorScheme:
         Highlight color
     dim : str
         Dimmed text color
+    accent1 : str
+        First accent color
+    accent2 : str
+        Second accent color
+    accent3 : str
+        Third accent color
+    separator : str
+        Separator/border color
     """
 
     background: str
@@ -55,6 +63,10 @@ class ColorScheme:
     warning: str
     highlight: str
     dim: str
+    accent1: str
+    accent2: str
+    accent3: str
+    separator: str
 
 
 class Theme:
@@ -75,6 +87,10 @@ class Theme:
         warning="#ff9e64",
         highlight="#ff007c",
         dim="#414868",
+        accent1="#2ac3de",
+        accent2="#f7768e",
+        accent3="#73daca",
+        separator="#545c7e",
     )
 
     DRACULA: ClassVar[ColorScheme] = ColorScheme(
@@ -92,6 +108,10 @@ class Theme:
         warning="#ffb86c",
         highlight="#ff79c6",
         dim="#44475a",
+        accent1="#8be9fd",
+        accent2="#ff79c6",
+        accent3="#50fa7b",
+        separator="#44475a",
     )
 
     NORD: ClassVar[ColorScheme] = ColorScheme(
@@ -109,6 +129,10 @@ class Theme:
         warning="#d08770",
         highlight="#b48ead",
         dim="#3b4252",
+        accent1="#81a1c1",
+        accent2="#5e81ac",
+        accent3="#88c0d0",
+        separator="#4c566a",
     )
 
     GRUVBOX_DARK: ClassVar[ColorScheme] = ColorScheme(
@@ -126,6 +150,10 @@ class Theme:
         warning="#fe8019",
         highlight="#d3869b",
         dim="#504945",
+        accent1="#8ec07c",
+        accent2="#fe8019",
+        accent3="#83a598",
+        separator="#504945",
     )
 
     MONOKAI: ClassVar[ColorScheme] = ColorScheme(
@@ -143,6 +171,10 @@ class Theme:
         warning="#fd971f",
         highlight="#f92672",
         dim="#49483e",
+        accent1="#66d9ef",
+        accent2="#f92672",
+        accent3="#a6e22e",
+        separator="#49483e",
     )
 
     CATPPUCCIN_MOCHA: ClassVar[ColorScheme] = ColorScheme(
@@ -160,4 +192,8 @@ class Theme:
         warning="#fab387",
         highlight="#f5c2e7",
         dim="#45475a",
+        accent1="#89dceb",
+        accent2="#f5c2e7",
+        accent3="#94e2d5",
+        separator="#585b70",
     )

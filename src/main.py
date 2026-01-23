@@ -1,10 +1,11 @@
-# The Python Standard Library.
+"""Main entry point for generating the riced shell SVG profile."""
+
 from pathlib import Path
 
-# Local project imports.
 from config.config import ConfigParser
 from svg.svg_generator import SvgGenerator
 from utils import format, time
+
 
 def main() -> None:
     """
@@ -21,23 +22,35 @@ def main() -> None:
     line_height = 18
     x = 40
 
-    # Header prompt
-    svg.create_text_element(
+    # Header prompt with multi-colored elements
+    svg.create_colored_text(
         x, y,
-        "┌─[ victor@luque ]─[ ~/dev ]",
-        "prompt"
+        [
+            ("┌─[", "accent1"),
+            (" victor", "prompt"),
+            ("@", "accent2"),
+            ("luque", "accent3"),
+            (" ]─[", "accent1"),
+            (" ~/dev", "string"),
+            (" ]", "accent1"),
+        ]
     )
     y += line_height
-    svg.create_text_element(
+
+    svg.create_colored_text(
         x, y,
-        "└─❯ ./profile.sh",
-        "warning"
+        [
+            ("└─", "accent1"),
+            ("❯", "warning"),
+            (" ./profile.sh", "command"),
+        ]
     )
     y += line_height
+
     svg.create_text_element(
         x, y,
         "────────────────────────────────────────────",
-        "highlight"
+        "separator"
     )
 
     # Banner
@@ -50,76 +63,76 @@ def main() -> None:
         "███████║██║  ██║╚██████╔╝██║ ╚████║   ██║   ██║  ██║",
         "╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝",
     ]
-    svg.create_multiple_tspan(x, y, banner, "value")
+    svg.create_multiple_tspan(x, y, banner, "highlight")
     y += line_height * (len(banner) + 1)
 
     # [ system ]
-    svg.create_text_element(x, y, "[ system ]", "string")
+    svg.create_colored_text(x, y, [("[", "accent1"), (" system ", "string"), ("]", "accent1")])
     y += line_height
-    svg.create_text_element(
+    svg.create_colored_text(
         x, y,
         format.toDotLine("os", cfg.user.operative_system or "unknown")
     )
     y += line_height
-    svg.create_text_element(
+    svg.create_colored_text(
         x, y,
         format.toDotLine("uptime", time.human_uptime(cfg.user.birthday))
     )
     y += line_height
-    svg.create_text_element(
+    svg.create_colored_text(
         x, y,
         format.toDotLine("host", cfg.user.position or "unknown")
     )
 
     # [ dev ]
     y += line_height * 2
-    svg.create_text_element(x, y, "[ dev ]", "string")
+    svg.create_colored_text(x, y, [("[", "accent1"), (" dev ", "string"), ("]", "accent1")])
     y += line_height
-    svg.create_text_element(
+    svg.create_colored_text(
         x, y,
         format.toDotLine("langs", " · ".join(cfg.languages.programming))
     )
     y += line_height
-    svg.create_text_element(
+    svg.create_colored_text(
         x, y,
         format.toDotLine("tooling", " · ".join(cfg.activities.software))
     )
     y += line_height
-    svg.create_text_element(
+    svg.create_colored_text(
         x, y,
         format.toDotLine("editor", cfg.user.ide or "unknown")
     )
 
-    # [ github ] (static placeholders — inject stats later)
+    # [ github ]
     y += line_height * 2
-    svg.create_text_element(x, y, "[ github ]", "string")
+    svg.create_colored_text(x, y, [("[", "accent1"), (" github ", "string"), ("]", "accent1")])
     y += line_height
-    svg.create_text_element(x, y, format.toDotLine("repos", "15 (+25)"))
+    svg.create_colored_text(x, y, format.toDotLine("repos", "15 (+25)"))
     y += line_height
-    svg.create_text_element(x, y, format.toDotLine("commits", "2,527"))
+    svg.create_colored_text(x, y, format.toDotLine("commits", "2,527"))
     y += line_height
-    svg.create_text_element(x, y, format.toDotLine("stars", "12"))
+    svg.create_colored_text(x, y, format.toDotLine("stars", "12"))
 
     # [ contact ]
     y += line_height * 2
-    svg.create_text_element(x, y, "[ contact ]", "string")
+    svg.create_colored_text(x, y, [("[", "accent1"), (" contact ", "string"), ("]", "accent1")])
     y += line_height
-    svg.create_text_element(
+    svg.create_colored_text(
         x, y,
         format.toDotLine("mail", cfg.contact.personal_mail or "-")
     )
     y += line_height
-    svg.create_text_element(
+    svg.create_colored_text(
         x, y,
         format.toDotLine("work", cfg.contact.work_mail or "-")
     )
     y += line_height
-    svg.create_text_element(
+    svg.create_colored_text(
         x, y,
         format.toDotLine("linkedin", cfg.contact.linkedin or "-")
     )
     y += line_height
-    svg.create_text_element(
+    svg.create_colored_text(
         x, y,
         format.toDotLine("discord", cfg.contact.discord or "-")
     )

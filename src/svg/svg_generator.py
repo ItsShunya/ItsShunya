@@ -112,6 +112,7 @@ class SvgGenerator:
                     font-family: JetBrains Mono, Fira Code, monospace;
                     font-size: 14px;
                     fill: {t.string};
+                    font-weight: 600;
                 }}
                 .comment {{
                     font-family: JetBrains Mono, Fira Code, monospace;
@@ -134,6 +135,7 @@ class SvgGenerator:
                     font-family: JetBrains Mono, Fira Code, monospace;
                     font-size: 14px;
                     fill: {t.warning};
+                    font-weight: 600;
                 }}
                 .highlight {{
                     font-family: JetBrains Mono, Fira Code, monospace;
@@ -145,6 +147,29 @@ class SvgGenerator:
                     font-family: JetBrains Mono, Fira Code, monospace;
                     font-size: 14px;
                     fill: {t.dim};
+                }}
+                .accent1 {{
+                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-size: 14px;
+                    fill: {t.accent1};
+                    font-weight: 600;
+                }}
+                .accent2 {{
+                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-size: 14px;
+                    fill: {t.accent2};
+                    font-weight: 600;
+                }}
+                .accent3 {{
+                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-size: 14px;
+                    fill: {t.accent3};
+                    font-weight: 600;
+                }}
+                .separator {{
+                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-size: 14px;
+                    fill: {t.separator};
                 }}
             </style>'''
         self.content.append(style)
@@ -178,7 +203,7 @@ class SvgGenerator:
         text : str
             Text content to display
         text_class : str, optional
-            CSS class for styling the text (default is "ascii")
+            CSS class for styling the text (default is "cc")
 
         Returns
         -------
@@ -190,6 +215,38 @@ class SvgGenerator:
             f'<tspan>{text}</tspan>'
             f'</text>'
         )
+        self.content.append(text_element)
+        return text_element
+
+    def create_colored_text(
+        self,
+        x: int | float,
+        y: int | float,
+        segments: list[tuple[str, str]],
+    ) -> str:
+        """
+        Create a text element with multiple colored segments on the same line.
+
+        Parameters
+        ----------
+        x : int or float
+            X-coordinate position of the text
+        y : int or float
+            Y-coordinate position of the text
+        segments : list[tuple[str, str]]
+            List of (text, class_name) tuples for each colored segment
+
+        Returns
+        -------
+        str
+            The generated text element as an SVG string
+        """
+        text_element = f'<text x="{x}" y="{y}" xml:space="preserve">'
+
+        for text, class_name in segments:
+            text_element += f'<tspan class="{class_name}">{text}</tspan>'
+
+        text_element += '</text>'
         self.content.append(text_element)
         return text_element
 
