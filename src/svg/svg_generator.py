@@ -1,11 +1,14 @@
 """SVG generator module for creating SVG documents with text elements and styling."""
 
+from style.themes import ColorScheme, Theme
+
 
 class SvgGenerator:
     def __init__(
         self,
         width: int = 1000,
         height: int = 600,
+        theme: ColorScheme = Theme.TOKYO_NIGHT,
     ) -> None:
         """
         Initialize the SVG generator with specified dimensions.
@@ -16,9 +19,12 @@ class SvgGenerator:
             Width of the SVG canvas in pixels (default is 1000)
         height : int, optional
             Height of the SVG canvas in pixels (default is 600)
+        theme : ColorScheme, optional
+            Color scheme to use for styling (default is Theme.TOKYO_NIGHT)
         """
         self.width: int = width
         self.height: int = height
+        self.theme: ColorScheme = theme
         self.content: list[str] = []
         self._init_svg()
 
@@ -64,25 +70,82 @@ class SvgGenerator:
         -------
         None
         """
-        style = '''<style>
-                .ascii {
-                    font-family: JetBrains Mono, monospace;
+        t = self.theme
+        style = f'''<style>
+                .ascii {{
+                    font-family: JetBrains Mono, Fira Code, monospace;
                     font-size: 14px;
-                    fill: #ffffff;
-                }
-                .key {
-                    font-family: Arial, sans-serif;
+                    fill: {t.ascii};
+                    font-weight: 500;
+                }}
+                .key {{
+                    font-family: JetBrains Mono, Fira Code, monospace;
                     font-size: 12px;
-                    fill: #b3b3b3;
-                }
-                .value {
-                    font-family: Arial, sans-serif;
+                    fill: {t.key};
+                    font-weight: 600;
+                }}
+                .value {{
+                    font-family: JetBrains Mono, Fira Code, monospace;
                     font-size: 12px;
-                    fill: #ffffff;
-                }
-                .cc {
-                    fill: #333333;
-                }
+                    fill: {t.value};
+                    font-weight: 500;
+                }}
+                .cc {{
+                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-size: 12px;
+                    fill: {t.cc};
+                    font-weight: 500;
+                }}
+                .prompt {{
+                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-size: 14px;
+                    fill: {t.prompt};
+                    font-weight: 700;
+                }}
+                .command {{
+                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-size: 14px;
+                    fill: {t.command};
+                    font-weight: 600;
+                }}
+                .string {{
+                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-size: 14px;
+                    fill: {t.string};
+                }}
+                .comment {{
+                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-size: 14px;
+                    fill: {t.comment};
+                    font-style: italic;
+                }}
+                .error {{
+                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-size: 14px;
+                    fill: {t.error};
+                    font-weight: 600;
+                }}
+                .success {{
+                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-size: 14px;
+                    fill: {t.success};
+                }}
+                .warning {{
+                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-size: 14px;
+                    fill: {t.warning};
+                }}
+                .highlight {{
+                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-size: 14px;
+                    fill: {t.highlight};
+                    font-weight: 700;
+                }}
+                .dim {{
+                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-size: 14px;
+                    fill: {t.dim};
+                }}
             </style>'''
         self.content.append(style)
 
@@ -94,14 +157,14 @@ class SvgGenerator:
         -------
         None
         """
-        self.content.append('<rect width="100%" height="100%" fill="#1a1a1a"/>')
+        self.content.append(f'<rect width="100%" height="100%" fill="{self.theme.background}"/>')
 
     def create_text_element(
         self,
         x: int | float,
         y: int | float,
         text: str,
-        text_class: str = "ascii",
+        text_class: str = "cc",
     ) -> str:
         """
         Create a text element with tspan for SVG rendering.

@@ -24,17 +24,20 @@ def main() -> None:
     # Header prompt
     svg.create_text_element(
         x, y,
-        "┌─[ victor@luque ]─[ ~/dev ]"
+        "┌─[ victor@luque ]─[ ~/dev ]",
+        "prompt"
     )
     y += line_height
     svg.create_text_element(
         x, y,
-        "└─❯ ./profile.sh"
+        "└─❯ ./profile.sh",
+        "warning"
     )
     y += line_height
     svg.create_text_element(
         x, y,
-        "────────────────────────────────────────────"
+        "────────────────────────────────────────────",
+        "highlight"
     )
 
     # Banner
@@ -47,11 +50,11 @@ def main() -> None:
         "███████║██║  ██║╚██████╔╝██║ ╚████║   ██║   ██║  ██║",
         "╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝",
     ]
-    svg.create_multiple_tspan(x, y, banner)
+    svg.create_multiple_tspan(x, y, banner, "value")
     y += line_height * (len(banner) + 1)
 
     # [ system ]
-    svg.create_text_element(x, y, "[ system ]")
+    svg.create_text_element(x, y, "[ system ]", "string")
     y += line_height
     svg.create_text_element(
         x, y,
@@ -70,7 +73,7 @@ def main() -> None:
 
     # [ dev ]
     y += line_height * 2
-    svg.create_text_element(x, y, "[ dev ]")
+    svg.create_text_element(x, y, "[ dev ]", "string")
     y += line_height
     svg.create_text_element(
         x, y,
@@ -89,7 +92,7 @@ def main() -> None:
 
     # [ github ] (static placeholders — inject stats later)
     y += line_height * 2
-    svg.create_text_element(x, y, "[ github ]")
+    svg.create_text_element(x, y, "[ github ]", "string")
     y += line_height
     svg.create_text_element(x, y, format.toDotLine("repos", "15 (+25)"))
     y += line_height
@@ -99,7 +102,7 @@ def main() -> None:
 
     # [ contact ]
     y += line_height * 2
-    svg.create_text_element(x, y, "[ contact ]")
+    svg.create_text_element(x, y, "[ contact ]", "string")
     y += line_height
     svg.create_text_element(
         x, y,
