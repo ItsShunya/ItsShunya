@@ -289,6 +289,34 @@ class SvgGenerator:
         self.content.append(text_element)
         return text_element
 
+    def create_ascii_logo(
+        self,
+        x: int | float,
+        y: int | float,
+        logo_lines: list[tuple[str, str]],
+        line_height: int = 18,
+    ) -> None:
+        """
+        Create an ASCII art logo with individual color classes per line.
+
+        Parameters
+        ----------
+        x : int or float
+            X-coordinate position of the logo
+        y : int or float
+            Y-coordinate position of the logo
+        logo_lines : list of tuple[str, str]
+            List of (line_content, color_class) tuples for each line
+        line_height : int, optional
+            Vertical spacing between lines in pixels (default is 18)
+
+        Returns
+        -------
+        None
+        """
+        for i, (line, color_class) in enumerate(logo_lines):
+            self.create_text_element(x, y + (i * line_height), line, color_class)
+
     def save(
         self,
         filename: str = "output.svg",

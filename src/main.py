@@ -2,6 +2,8 @@
 
 from pathlib import Path
 
+from ascii.banner import BANNERS, DEFAULT_BANNER
+from ascii.logos import LOGOS, DEFAULT_LOGO
 from config.config import ConfigParser
 from svg.svg_generator import SvgGenerator
 from utils import format, time
@@ -55,14 +57,9 @@ def main() -> None:
 
     # Banner
     y += line_height * 2
-    banner = [
-        "  ███████╗██╗  ██╗██╗   ██╗███╗   ██╗██╗   ██╗ █████╗ ",
-        "  ██╔════╝██║  ██║██║   ██║████╗  ██║╚██╗ ██╔╝██╔══██╗",
-        "  ███████╗███████║██║   ██║██╔██╗ ██║ ╚████╔╝ ███████║",
-        "  ╚════██║██╔══██║██║   ██║██║╚██╗██║  ╚██╔╝  ██╔══██║",
-        "  ███████║██║  ██║╚██████╔╝██║ ╚████║   ██║   ██║  ██║",
-        "  ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝",
-    ]
+    banner = BANNERS[DEFAULT_BANNER]
+    # Add indentation to banner
+    banner = ["  " + line for line in banner]
     svg.create_multiple_tspan(x, y, banner, "highlight")
     y += line_height * (len(banner) + 1)
 
