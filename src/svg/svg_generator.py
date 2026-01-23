@@ -8,7 +8,7 @@ class SvgGenerator:
         self,
         width: int = 1000,
         height: int = 600,
-        theme: ColorScheme = Theme.TOKYO_NIGHT,
+        theme: ColorScheme = Theme.NORD,
     ) -> None:
         """
         Initialize the SVG generator with specified dimensions.
@@ -168,7 +168,7 @@ class SvgGenerator:
                 }}
                 .separator {{
                     font-family: JetBrains Mono, Fira Code, monospace;
-                    font-size: 14px;
+                    font-size: 12px;
                     fill: {t.separator};
                 }}
             </style>'''
