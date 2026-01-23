@@ -2,7 +2,8 @@ User:
   Username: "Shunya"
   Birthday: "1998-05-26"
   Operative_System: "NixOS"
-  Job: "Embedded Software Engineer"
+  Position: "Embedded Software Engineer"
+  Company: "INBRAIN Neuroelectronics"
   IDE: "VSCode"
 Languages:
   Programming:

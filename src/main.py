@@ -19,7 +19,7 @@ def main() -> None:
     cfg = ConfigParser.from_yaml_file(config_path)
 
     # Initialize SVG
-    svg = SvgGenerator(width=1000, height=650)
+    svg = SvgGenerator(width=500, height=650)
 
     y = 40
     line_height = 18
@@ -88,7 +88,12 @@ def main() -> None:
     y += line_height
     svg.create_colored_text(
         x, y,
-        format.toDotLine("host", cfg.user.position or "unknown")
+        format.toDotLine("kernel", cfg.user.position or "unknown")
+    )
+    y += line_height
+    svg.create_colored_text(
+        x, y,
+        format.toDotLine("host", cfg.user.company or "unknown")
     )
 
     # [ dev ]

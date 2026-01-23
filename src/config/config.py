@@ -21,6 +21,8 @@ class User:
         Operating system the user is using.
     position : str | None, optional
         The user's position or role (if applicable).
+    company : str | None, optional
+        The company where the user works.
     ide : str | None, optional
         IDE used by the user.
     """
@@ -29,6 +31,7 @@ class User:
     birthday: datetime
     operative_system: str | None = None
     position: str | None = None
+    company: str | None = None
     ide: str | None = None
 
 
