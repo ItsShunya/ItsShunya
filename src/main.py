@@ -4,6 +4,7 @@ from pathlib import Path
 
 from ascii.banner import BANNERS, DEFAULT_BANNER
 from ascii.logos import LOGOS, DEFAULT_LOGO
+
 from config.config import ConfigParser
 from svg.svg_generator import SvgGenerator
 from utils import format, time
@@ -55,8 +56,17 @@ def main() -> None:
         "separator"
     )
 
-    # Banner
+    # Banner (and optional logo)
     y += line_height * 2
+
+    # Uncomment to add ASCII logo on the left:
+    # logo = LOGOS[DEFAULT_LOGO]  # or use a specific logo like LOGOS["terminal"]
+    # svg.create_ascii_logo(x, y, logo, line_height)
+    # banner_x = 200  # Shift banner to the right to make room for logo
+    # banner = BANNERS[DEFAULT_BANNER]
+    # svg.create_multiple_tspan(banner_x, y, banner, "highlight")
+
+    # Standard banner without logo:
     banner = BANNERS[DEFAULT_BANNER]
     # Add indentation to banner
     banner = ["  " + line for line in banner]
