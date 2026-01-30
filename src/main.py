@@ -150,7 +150,7 @@ def main() -> None:
     )
 
     # Save SVG
-    svg.save("profile.svg")
+    svg.save("output/profile.svg")
 
 
 if __name__ == "__main__":

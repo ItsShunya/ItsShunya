@@ -190,6 +190,7 @@ class SvgGenerator:
         y: int | float,
         text: str,
         text_class: str = "cc",
+        id: str | None = None
     ) -> str:
         """
         Create a text element with tspan for SVG rendering.
@@ -204,14 +205,17 @@ class SvgGenerator:
             Text content to display
         text_class : str, optional
             CSS class for styling the text (default is "cc")
+        id : str, optional
+            Identificator to be re-used for the tspan.
 
         Returns
         -------
         str
             The generated text element as an SVG string
         """
+        id_str = ' id="{id}" ' if id else None
         text_element = (
-            f'<text x="{x}" y="{y}" class="{text_class}" xml:space="preserve">'
+            f'<text x="{x}" y="{y}" class="{text_class}"{id} xml:space="preserve">'
             f'<tspan>{text}</tspan>'
             f'</text>'
         )
