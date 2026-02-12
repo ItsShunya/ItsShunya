@@ -28,6 +28,8 @@ class User:
     """
 
     username: str
+    name: str
+    surname: str
     birthday: datetime
     operative_system: str | None = None
     position: str | None = None
