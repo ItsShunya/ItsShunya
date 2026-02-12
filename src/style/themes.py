@@ -66,7 +66,7 @@ class ColorScheme:
     accent1:    str
     accent2:    str
     accent3:    str
-    sep:        str
+    separator:  str
 
 
 class Theme:
