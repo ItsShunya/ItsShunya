@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 650">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 700">
 <style>
                 .ascii {
                     font-family: JetBrains Mono, monospace;
@@ -119,7 +119,7 @@
 <text x="40" y="310" xml:space="preserve"><tspan class="key">host</tspan><tspan class="separator"> </tspan><tspan class="separator">...................................</tspan><tspan class="separator"> </tspan><tspan class="value">INBRAIN Neuroelectronics</tspan></text>
 <text x="40" y="346" xml:space="preserve"><tspan class="accent1">[</tspan><tspan class="string"> dev </tspan><tspan class="accent1">]</tspan></text>
 <text x="40" y="364" xml:space="preserve"><tspan class="key">langs</tspan><tspan class="separator"> </tspan><tspan class="separator">..........................................</tspan><tspan class="separator"> </tspan><tspan class="value">C · C++ · Python</tspan></text>
-<text x="40" y="382" xml:space="preserve"><tspan class="key">tooling</tspan><tspan class="separator"> </tspan><tspan class="separator">.......................................</tspan><tspan class="separator"> </tspan><tspan class="value">OSS · Kernel · OS</tspan></text>
+<text x="40" y="382" xml:space="preserve"><tspan class="key">tooling</tspan><tspan class="separator"> </tspan><tspan class="separator">.............................</tspan><tspan class="separator"> </tspan><tspan class="value">Embedded · GUI (Qt) · ML/AI</tspan></text>
 <text x="40" y="400" xml:space="preserve"><tspan class="key">editor</tspan><tspan class="separator"> </tspan><tspan class="separator">...................................................</tspan><tspan class="separator"> </tspan><tspan class="value">VSCode</tspan></text>
 <text x="40" y="436" xml:space="preserve"><tspan class="accent1">[</tspan><tspan class="string"> github </tspan><tspan class="accent1">]</tspan></text>
 <text x="40" y="454" xml:space="preserve"><tspan class="key">repos</tspan><tspan class="separator"> </tspan><tspan class="separator">..................................................</tspan><tspan class="separator"> </tspan><tspan class="value">25 (+35)</tspan></text>
@@ -131,5 +131,4 @@
 <text x="40" y="580" xml:space="preserve"><tspan class="key">web</tspan><tspan class="separator"> </tspan><tspan class="separator">.....................................</tspan><tspan class="separator"> </tspan><tspan class="value">https://shunya.is-a.dev</tspan></text>
 <text x="40" y="598" xml:space="preserve"><tspan class="key">work</tspan><tspan class="separator"> </tspan><tspan class="separator">........................</tspan><tspan class="separator"> </tspan><tspan class="value">vluque@inbrain-neuroelectronics.com</tspan></text>
 <text x="40" y="616" xml:space="preserve"><tspan class="key">linkedin</tspan><tspan class="separator"> </tspan><tspan class="separator">............</tspan><tspan class="separator"> </tspan><tspan class="value">https://linkedin.com/in/victorluquemartinez</tspan></text>
-<text x="40" y="634" xml:space="preserve"><tspan class="key">discord</tspan><tspan class="separator"> </tspan><tspan class="separator">..........................................</tspan><tspan class="separator"> </tspan><tspan class="value">ItsShunya#1234</tspan></text>
 </svg>

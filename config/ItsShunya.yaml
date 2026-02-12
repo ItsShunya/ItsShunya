@@ -23,9 +23,9 @@ Languages:
 
 Activities:
   Software:
-    - "OSS"
-    - "Kernel"
-    - "OS"
+    - "Embedded"
+    - "GUI (Qt)"
+    - "ML/AI"
   Hardware:
     - "Embedded"
     - "RTOS"
@@ -39,4 +39,3 @@ Contact:
   Web: https://shunya.is-a.dev
   Work_Mail: "vluque@inbrain-neuroelectronics.com"
   Linkedin: "https://linkedin.com/in/victorluquemartinez"
-  Discord: "ItsShunya#1234"

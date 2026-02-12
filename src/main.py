@@ -17,21 +17,21 @@ def main() -> None:
     # Load configuration
     cfg = ConfigParser.from_yaml_file(Path("config/ItsShunya.yaml"))
 
-    # Initialize SVG
-    svg = SvgGenerator(width=560, height=650)
-
-    y = 40
-    x = 40
-
-    line_ht = 18
-
+    # Fetch Github stats.
     commit_data, commit_time = timer.perf_counter(commit_counter, 7)
     star_data, star_time = timer.perf_counter(graph_repos_stars, 'stars', ['OWNER'])
     repo_data, repo_time = timer.perf_counter(graph_repos_stars, 'repos', ['OWNER'])
     contrib_data, contrib_time = timer.perf_counter(graph_repos_stars, 'repos', ['OWNER', 'COLLABORATOR', 'ORGANIZATION_MEMBER'])
     follower_data, follower_time = timer.perf_counter(follower_getter, cfg.user.username)
+    print(f"Total Github GraphQL query time: {(commit_time + star_time + repo_time + contrib_time + follower_time):.4f} s")
 
-    print(commit_data, star_data, repo_data, contrib_data, follower_data)
+    # Initialize SVG
+    svg = SvgGenerator(width=560, height=700)
+
+    y = 40
+    x = 40
+
+    line_ht = 18
 
     # Header prompt with multi-colored elements
     svg.create_colored_text(
@@ -118,7 +118,9 @@ def main() -> None:
         [
             ("[",       "accent1"),
             (" dev ",   "string"),
-            ("]",       "accent1")])
+            ("]",       "accent1")
+        ]
+    )
     y += line_ht
     svg.create_colored_text(
         x, y,
@@ -174,7 +176,7 @@ def main() -> None:
             ("[", "accent1"),
             (" contact ", "string"),
             ("]", "accent1")
-            ]
+        ]
     )
     y += line_ht
     svg.create_colored_text(
@@ -195,11 +197,6 @@ def main() -> None:
     svg.create_colored_text(
         x, y,
         format.toDotLine("linkedin", cfg.contact.linkedin or "-")
-    )
-    y += line_ht
-    svg.create_colored_text(
-        x, y,
-        format.toDotLine("discord", cfg.contact.discord or "-")
     )
 
     # Save SVG
