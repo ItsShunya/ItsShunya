@@ -35,7 +35,7 @@ jobs:
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           USER_NAME: ${{ secrets.USER_NAME }}
-        run: python src/today.py
+        run: python src/main.py
 
       - name: Commit
         run: |-
@@ -43,5 +43,5 @@ jobs:
           git diff
           git config --global user.email "github-actions-bot@itsshunya.github.io"
           git config --global user.name "ItsShunya/GitHub-Actions-Bot"
-          git commit -m "Updated README" -a || echo "No changes to commit"
+          git commit -m "Updated PROFILE" -a || echo "No changes to commit"
           git push
