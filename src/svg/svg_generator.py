@@ -73,101 +73,101 @@ class SvgGenerator:
         t = self.theme
         style = f'''<style>
                 .ascii {{
-                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-family: JetBrains Mono, monospace;
                     font-size: 14px;
                     fill: {t.ascii};
-                    font-weight: 500;
+                    font-weight: normal;
                 }}
                 .key {{
-                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-family: JetBrains Mono, monospace;
                     font-size: 12px;
                     fill: {t.key};
-                    font-weight: 600;
+                    font-weight: normal;
                 }}
                 .value {{
-                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-family: JetBrains Mono, monospace;
                     font-size: 12px;
                     fill: {t.value};
-                    font-weight: 500;
+                    font-weight: normal;
                 }}
                 .cc {{
-                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-family: JetBrains Mono, monospace;
                     font-size: 12px;
                     fill: {t.cc};
-                    font-weight: 500;
+                    font-weight: normal;
                 }}
                 .prompt {{
-                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-family: JetBrains Mono, monospace;
                     font-size: 14px;
                     fill: {t.prompt};
-                    font-weight: 700;
+                    font-weight: normal;
                 }}
                 .command {{
-                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-family: JetBrains Mono, monospace;
                     font-size: 14px;
                     fill: {t.command};
-                    font-weight: 600;
+                    font-weight: normal;
                 }}
                 .string {{
-                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-family: JetBrains Mono, monospace;
                     font-size: 14px;
                     fill: {t.string};
-                    font-weight: 600;
+                    font-weight: normal;
                 }}
                 .comment {{
-                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-family: JetBrains Mono, monospace;
                     font-size: 14px;
                     fill: {t.comment};
-                    font-style: italic;
+                    font-style: normal;
                 }}
                 .error {{
-                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-family: JetBrains Mono, monospace;
                     font-size: 14px;
                     fill: {t.error};
-                    font-weight: 600;
+                    font-weight: normal;
                 }}
                 .success {{
-                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-family: JetBrains Mono, monospace;
                     font-size: 14px;
                     fill: {t.success};
                 }}
                 .warning {{
-                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-family: JetBrains Mono, monospace;
                     font-size: 14px;
                     fill: {t.warning};
-                    font-weight: 600;
+                    font-weight: normal;
                 }}
                 .highlight {{
-                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-family: JetBrains Mono, monospace;
                     font-size: 14px;
                     fill: {t.highlight};
-                    font-weight: 700;
+                    font-weight: normal;
                 }}
                 .dim {{
-                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-family: JetBrains Mono, monospace;
                     font-size: 14px;
                     fill: {t.dim};
                 }}
                 .accent1 {{
-                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-family: JetBrains Mono, monospace;
                     font-size: 14px;
                     fill: {t.accent1};
-                    font-weight: 600;
+                    font-weight: normal;
                 }}
                 .accent2 {{
-                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-family: JetBrains Mono, monospace;
                     font-size: 14px;
                     fill: {t.accent2};
-                    font-weight: 600;
+                    font-weight: normal;
                 }}
                 .accent3 {{
-                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-family: JetBrains Mono, monospace;
                     font-size: 14px;
                     fill: {t.accent3};
-                    font-weight: 600;
+                    font-weight: normal;
                 }}
                 .separator {{
-                    font-family: JetBrains Mono, Fira Code, monospace;
+                    font-family: JetBrains Mono, monospace;
                     font-size: 12px;
                     fill: {t.separator};
                 }}
@@ -213,9 +213,9 @@ class SvgGenerator:
         str
             The generated text element as an SVG string
         """
-        id_str = ' id="{id}" ' if id else None
+        id_str = ' id="{id}" ' if id else ''
         text_element = (
-            f'<text x="{x}" y="{y}" class="{text_class}"{id} xml:space="preserve">'
+            f'<text x="{x}" y="{y}" class="{text_class}"{id_str} xml:space="preserve">'
             f'<tspan>{text}</tspan>'
             f'</text>'
         )

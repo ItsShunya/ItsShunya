@@ -53,7 +53,7 @@ def main() -> None:
     svg.create_text_element(
         x, y,
         "────────────────────────────────────────────",
-        "separator"
+        "separator", None
     )
 
     # Banner (and optional logo)
