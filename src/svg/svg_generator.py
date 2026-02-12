@@ -8,7 +8,7 @@ class SvgGenerator:
         self,
         width:  int = 1000,
         height: int = 600,
-        theme:  ColorScheme = Theme.NORD,
+        theme:  ColorScheme = Theme.CATPPUCCIN_MOCHA,
     ) -> None:
         """
         Initialize the SVG generator with specified dimensions.

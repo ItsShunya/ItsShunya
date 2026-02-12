@@ -4,107 +4,107 @@
                 .ascii {
                     font-family: JetBrains Mono, monospace;
                     font-size: 14px;
-                    fill: #eceff4;
+                    fill: #cdd6f4;
                     font-weight: normal;
                 }
                 .key {
                     font-family: JetBrains Mono, monospace;
                     font-size: 12px;
-                    fill: #88c0d0;
+                    fill: #89b4fa;
                     font-weight: normal;
                 }
                 .value {
                     font-family: JetBrains Mono, monospace;
                     font-size: 12px;
-                    fill: #b48ead;
+                    fill: #cba6f7;
                     font-weight: normal;
                 }
                 .cc {
                     font-family: JetBrains Mono, monospace;
                     font-size: 12px;
-                    fill: #4c566a;
+                    fill: #6c7086;
                     font-weight: normal;
                 }
                 .prompt {
                     font-family: JetBrains Mono, monospace;
                     font-size: 14px;
-                    fill: #8fbcbb;
+                    fill: #94e2d5;
                     font-weight: normal;
                 }
                 .command {
                     font-family: JetBrains Mono, monospace;
                     font-size: 14px;
-                    fill: #a3be8c;
+                    fill: #a6e3a1;
                     font-weight: normal;
                 }
                 .string {
                     font-family: JetBrains Mono, monospace;
                     font-size: 14px;
-                    fill: #ebcb8b;
+                    fill: #f9e2af;
                     font-weight: normal;
                 }
                 .comment {
                     font-family: JetBrains Mono, monospace;
                     font-size: 14px;
-                    fill: #4c566a;
+                    fill: #6c7086;
                     font-style: normal;
                 }
                 .error {
                     font-family: JetBrains Mono, monospace;
                     font-size: 14px;
-                    fill: #bf616a;
+                    fill: #f38ba8;
                     font-weight: normal;
                 }
                 .success {
                     font-family: JetBrains Mono, monospace;
                     font-size: 14px;
-                    fill: #a3be8c;
+                    fill: #a6e3a1;
                 }
                 .warning {
                     font-family: JetBrains Mono, monospace;
                     font-size: 14px;
-                    fill: #d08770;
+                    fill: #fab387;
                     font-weight: normal;
                 }
                 .highlight {
                     font-family: JetBrains Mono, monospace;
                     font-size: 14px;
-                    fill: #b48ead;
+                    fill: #f5c2e7;
                     font-weight: normal;
                 }
                 .dim {
                     font-family: JetBrains Mono, monospace;
                     font-size: 14px;
-                    fill: #3b4252;
+                    fill: #45475a;
                 }
                 .accent1 {
                     font-family: JetBrains Mono, monospace;
                     font-size: 14px;
-                    fill: #81a1c1;
+                    fill: #89dceb;
                     font-weight: normal;
                 }
                 .accent2 {
                     font-family: JetBrains Mono, monospace;
                     font-size: 14px;
-                    fill: #5e81ac;
+                    fill: #f5c2e7;
                     font-weight: normal;
                 }
                 .accent3 {
                     font-family: JetBrains Mono, monospace;
                     font-size: 14px;
-                    fill: #88c0d0;
+                    fill: #94e2d5;
                     font-weight: normal;
                 }
                 .separator {
                     font-family: JetBrains Mono, monospace;
                     font-size: 12px;
-                    fill: #4c566a;
+                    fill: #585b70;
                 }
             </style>
-<rect width="100%" height="100%" fill="#2e3440"/>
+<rect width="100%" height="100%" fill="#1e1e2e"/>
 <text x="40" y="40" xml:space="preserve"><tspan class="accent1">┌─[</tspan><tspan class="prompt"> victor</tspan><tspan class="accent2">@</tspan><tspan class="accent3">luque</tspan><tspan class="accent1"> ]─[</tspan><tspan class="string"> ~/dev</tspan><tspan class="accent1"> ]</tspan></text>
 <text x="40" y="58" xml:space="preserve"><tspan class="accent1">└─</tspan><tspan class="warning">❯</tspan><tspan class="command"> ./profile.sh</tspan></text>
-<text x="40" y="76" class="separator" xml:space="preserve"><tspan>────────────────────────────────────────────</tspan></text>
+<text x="40" y="76" class="separator" xml:space="preserve"><tspan>─────────────────────────────────────────────────────────────────</tspan></text>
 <text x="40" y="112" class="highlight" xml:space="preserve"><tspan x="40" dy="0">  ███████╗██╗  ██╗██╗   ██╗███╗   ██╗██╗   ██╗ █████╗ </tspan>
 <tspan x="40" dy="18">  ██╔════╝██║  ██║██║   ██║████╗  ██║╚██╗ ██╔╝██╔══██╗</tspan>
 <tspan x="40" dy="18">  ███████╗███████║██║   ██║██╔██╗ ██║ ╚████╔╝ ███████║</tspan>

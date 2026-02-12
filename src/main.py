@@ -93,7 +93,7 @@ def create_profile_header(
 
     svg.create_text_element(
         x, y,
-        "────────────────────────────────────────────",
+        "─────────────────────────────────────────────────────────────────",
         "separator", None
     )
     return y + LINE_HEIGHT
