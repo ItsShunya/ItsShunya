@@ -2,13 +2,12 @@
 
 from pathlib import Path
 
-from ascii.banner import BANNERS, DEFAULT_BANNER
 #from ascii.logos import LOGOS, DEFAULT_LOGO
-
+from ascii.banner import BANNERS, DEFAULT_BANNER
 from config.config import ConfigParser
 from svg.svg_generator import SvgGenerator
-from utils import format, time, timer
 from graphql.github import *
+from utils import format, time, timer
 
 # Constants
 LINE_HEIGHT = 18
@@ -16,15 +15,16 @@ SECTION_SPACING = LINE_HEIGHT * 2
 START_X = 40
 START_Y = 40
 
-
-def fetch_github_stats(cfg: ConfigParser) -> dict:
+def fetch_github_stats(
+    cfg: ConfigParser
+) -> dict:
     """Fetch all GitHub statistics and return as a dictionary."""
     github_queries = {
-        'commits': (commit_counter, 7),
-        'stars': (graph_repos_stars, 'stars', ['OWNER']),
-        'repos': (graph_repos_stars, 'repos', ['OWNER']),
-        'contrib': (graph_repos_stars, 'repos', ['OWNER', 'COLLABORATOR', 'ORGANIZATION_MEMBER']),
-        'followers': (follower_getter, cfg.user.username),
+        'commits':      (commit_counter, 7),
+        'stars':        (graph_repos_stars, 'stars', ['OWNER']),
+        'repos':        (graph_repos_stars, 'repos', ['OWNER']),
+        'contrib':      (graph_repos_stars, 'repos', ['OWNER', 'COLLABORATOR', 'ORGANIZATION_MEMBER']),
+        'followers':    (follower_getter, cfg.user.username),
     }
 
     github_data = {}
@@ -39,13 +39,24 @@ def fetch_github_stats(cfg: ConfigParser) -> dict:
     return github_data
 
 
-def add_info_line(svg: SvgGenerator, x: int, y: int, label: str, value: str):
+def add_info_line(
+    svg: SvgGenerator,
+    x: int,
+    y: int,
+    label: str,
+    value: str
+) -> int:
     """Add a single info line and return new y position."""
     svg.create_colored_text(x, y, format.toDotLine(label, value))
     return y + LINE_HEIGHT
 
 
-def add_section_header(svg: SvgGenerator, x: int, y: int, title: str):
+def add_section_header(
+    svg: SvgGenerator,
+    x: int,
+    y: int,
+    title: str
+) -> int:
     """Add a section header and return new y position."""
     svg.create_colored_text(x, y, [
         ("[", "accent1"),
@@ -55,7 +66,12 @@ def add_section_header(svg: SvgGenerator, x: int, y: int, title: str):
     return y + LINE_HEIGHT
 
 
-def create_profile_header(svg: SvgGenerator, x: int, y: int, cfg: ConfigParser):
+def create_profile_header(
+    svg: SvgGenerator,
+    x: int,
+    y: int,
+    cfg: ConfigParser
+) -> int:
     """Create the shell prompt header."""
     svg.create_colored_text(x, y, [
         ("┌─[", "accent1"),
@@ -83,7 +99,11 @@ def create_profile_header(svg: SvgGenerator, x: int, y: int, cfg: ConfigParser):
     return y + LINE_HEIGHT
 
 
-def create_banner(svg: SvgGenerator, x: int, y: int) -> int:
+def create_banner(
+    svg: SvgGenerator,
+    x: int,
+    y: int
+) -> int:
     """Create the ASCII banner and return new y position."""
     y += LINE_HEIGHT
 
@@ -102,7 +122,10 @@ def create_banner(svg: SvgGenerator, x: int, y: int) -> int:
     return y + LINE_HEIGHT * (len(banner) + 1)
 
 
-def build_sections_data(cfg: ConfigParser, github_data: dict):
+def build_sections_data(
+    cfg: ConfigParser,
+    github_data: dict
+) -> dict:
     """Build the data structure for all profile sections."""
     return {
         "system": [
@@ -131,7 +154,12 @@ def build_sections_data(cfg: ConfigParser, github_data: dict):
     }
 
 
-def render_sections(svg: SvgGenerator, x: int, y: int, sections: tuple):
+def render_sections(
+    svg: SvgGenerator,
+    x: int,
+    y: int,
+    sections: tuple
+) -> int:
     """Render all profile sections and return final y position."""
     for section_name, items in sections.items():
         y += LINE_HEIGHT  # spacing between sections

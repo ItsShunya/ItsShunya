@@ -6,9 +6,9 @@ from style.themes import ColorScheme, Theme
 class SvgGenerator:
     def __init__(
         self,
-        width: int = 1000,
+        width:  int = 1000,
         height: int = 600,
-        theme: ColorScheme = Theme.NORD,
+        theme:  ColorScheme = Theme.NORD,
     ) -> None:
         """
         Initialize the SVG generator with specified dimensions.
@@ -22,10 +22,10 @@ class SvgGenerator:
         theme : ColorScheme, optional
             Color scheme to use for styling (default is Theme.TOKYO_NIGHT)
         """
-        self.width: int = width
-        self.height: int = height
-        self.theme: ColorScheme = theme
-        self.content: list[str] = []
+        self.width:     int = width
+        self.height:    int = height
+        self.theme:     ColorScheme = theme
+        self.content:   list[str] = []
         self._init_svg()
 
     def _init_svg(self) -> None:

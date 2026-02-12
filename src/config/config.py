@@ -15,6 +15,10 @@ class User:
     ----------
     username : str
         The username of the user.
+    name : str
+        The user's real name.
+    surname : str
+        The user's real surname.
     birthday : datetime
         The user's date of birth.
     operative_system : str | None, optional
@@ -27,14 +31,14 @@ class User:
         IDE used by the user.
     """
 
-    username: str
-    name: str
-    surname: str
-    birthday: datetime
-    operative_system: str | None = None
-    position: str | None = None
-    company: str | None = None
-    ide: str | None = None
+    username:           str
+    name:               str
+    surname:            str
+    birthday:           datetime
+    operative_system:   str | None = None
+    position:           str | None = None
+    company:            str | None = None
+    ide:                str | None = None
 
 
 @dataclass
@@ -52,9 +56,9 @@ class Languages:
         List of real-world languages the user speaks.
     """
 
-    programming: list[str] = field(default_factory=list)
-    other: list[str] = field(default_factory=list)
-    real: list[str] = field(default_factory=list)
+    programming:    list[str] = field(default_factory=list)
+    other:          list[str] = field(default_factory=list)
+    real:           list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -72,9 +76,9 @@ class Activities:
         List of other activities the user is involved in.
     """
 
-    software: list[str] = field(default_factory=list)
-    hardware: list[str] = field(default_factory=list)
-    other: list[str] = field(default_factory=list)
+    software:   list[str] = field(default_factory=list)
+    hardware:   list[str] = field(default_factory=list)
+    other:      list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -86,6 +90,8 @@ class Contact:
     ----------
     personal_mail : str | None, optional
         User's personal email address (if applicable).
+    web: str | None, optional
+        User's website.
     work_mail : str | None, optional
         User's work email address (if applicable).
     linkedin : str | None, optional
@@ -96,12 +102,12 @@ class Contact:
         User's Stack Overflow profile URL (if applicable).
     """
 
-    personal_mail: str | None = None
-    web: str | None = None
-    work_mail: str | None = None
-    linkedin: str | None = None
-    discord: str | None = None
-    stackoverflow: str | None = None
+    personal_mail:  str | None = None
+    web:            str | None = None
+    work_mail:      str | None = None
+    linkedin:       str | None = None
+    discord:        str | None = None
+    stackoverflow:  str | None = None
 
 
 @dataclass
@@ -123,7 +129,7 @@ class ConfigParser(YAMLWizard):
         User's contact information.
     """
 
-    user: User
-    languages: Languages
+    user:       User
+    languages:  Languages
     activities: Activities
-    contact: Contact
+    contact:    Contact
