@@ -7,8 +7,8 @@ from ascii.logos import LOGOS, DEFAULT_LOGO
 
 from config.config import ConfigParser
 from svg.svg_generator import SvgGenerator
-from utils import format, time
-
+from utils import format, time, timer
+from graphql.github import *
 
 def main() -> None:
     """
@@ -24,6 +24,14 @@ def main() -> None:
     x = 40
 
     line_ht = 18
+
+    commit_data, commit_time = timer.perf_counter(commit_counter, 7)
+    star_data, star_time = timer.perf_counter(graph_repos_stars, 'stars', ['OWNER'])
+    repo_data, repo_time = timer.perf_counter(graph_repos_stars, 'repos', ['OWNER'])
+    contrib_data, contrib_time = timer.perf_counter(graph_repos_stars, 'repos', ['OWNER', 'COLLABORATOR', 'ORGANIZATION_MEMBER'])
+    follower_data, follower_time = timer.perf_counter(follower_getter, cfg.user.username)
+
+    print(commit_data, star_data, repo_data, contrib_data, follower_data)
 
     # Header prompt with multi-colored elements
     svg.create_colored_text(
@@ -140,17 +148,22 @@ def main() -> None:
     y += line_ht
     svg.create_colored_text(
         x, y,
-        format.toDotLine("repos", "15 (+25)")
+        format.toDotLine("repos", f"{repo_data} (+{contrib_data})")
     )
     y += line_ht
     svg.create_colored_text(
         x, y,
-        format.toDotLine("commits", "2,527")
+        format.toDotLine("commits", f"{commit_data}")
     )
     y += line_ht
     svg.create_colored_text(
         x, y,
-        format.toDotLine("stars", "12")
+        format.toDotLine("stars", f"{star_data}")
+    )
+    y += line_ht
+    svg.create_colored_text(
+        x, y,
+        format.toDotLine("followers", f"{follower_data}")
     )
 
     ##### [ contact ]
@@ -167,6 +180,11 @@ def main() -> None:
     svg.create_colored_text(
         x, y,
         format.toDotLine("mail", cfg.contact.personal_mail or "-")
+    )
+    y += line_ht
+    svg.create_colored_text(
+        x, y,
+        format.toDotLine("web", cfg.contact.web or "-")
     )
     y += line_ht
     svg.create_colored_text(

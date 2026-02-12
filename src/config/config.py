@@ -97,6 +97,7 @@ class Contact:
     """
 
     personal_mail: str | None = None
+    web: str | None = None
     work_mail: str | None = None
     linkedin: str | None = None
     discord: str | None = None
