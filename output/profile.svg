@@ -114,7 +114,7 @@
 </text>
 <text x="40" y="256" xml:space="preserve"><tspan class="accent1">[</tspan><tspan class="string"> system </tspan><tspan class="accent1">]</tspan></text>
 <text x="40" y="274" xml:space="preserve"><tspan class="key">os</tspan><tspan class="separator"> </tspan><tspan class="separator">........................................................</tspan><tspan class="separator"> </tspan><tspan class="value">NixOS</tspan></text>
-<text x="40" y="292" xml:space="preserve"><tspan class="key">uptime</tspan><tspan class="separator"> </tspan><tspan class="separator">................................................</tspan><tspan class="separator"> </tspan><tspan class="value">27y 9m 9d</tspan></text>
+<text x="40" y="292" xml:space="preserve"><tspan class="key">uptime</tspan><tspan class="separator"> </tspan><tspan class="separator">...............................................</tspan><tspan class="separator"> </tspan><tspan class="value">27y 9m 10d</tspan></text>
 <text x="40" y="310" xml:space="preserve"><tspan class="key">kernel</tspan><tspan class="separator"> </tspan><tspan class="separator">...............................</tspan><tspan class="separator"> </tspan><tspan class="value">Embedded Software Engineer</tspan></text>
 <text x="40" y="328" xml:space="preserve"><tspan class="key">host</tspan><tspan class="separator"> </tspan><tspan class="separator">...................................</tspan><tspan class="separator"> </tspan><tspan class="value">INBRAIN Neuroelectronics</tspan></text>
 <text x="40" y="364" xml:space="preserve"><tspan class="accent1">[</tspan><tspan class="string"> dev </tspan><tspan class="accent1">]</tspan></text>
