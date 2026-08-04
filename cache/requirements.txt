@@ -2,5 +2,5 @@ python-dateutil
 requests
 lxml
 pyyaml
-dataclass-wizard
+dataclass-wizard<1.0
 pydantic-settings
