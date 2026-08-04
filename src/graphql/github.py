@@ -518,10 +518,13 @@ def stars_counter(
         Total number of stars across all repositories
     """
     total_stars = 0
-    for node in data:
-        total_stars += node['node']['stargazers']['totalCount']
+    for edge in data:
+        repo = edge.get("node") if edge else None
+        stargazers = repo.get("stargazers") if repo else None
+        count = stargazers.get("totalCount") if stargazers else None
+        if isinstance(count, int):
+            total_stars += count
     return total_stars
-
 
 def commit_counter(
     comment_size: int,
