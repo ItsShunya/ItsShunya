@@ -115,7 +115,7 @@ Your SVG will be generated at `output/profile.svg`!
 
 The tool comes with several built-in color themes:
 
-- **Tokyo Night** 
+- **Tokyo Night**
 - **Dracula**
 - **Nord**
 - **Gruvbox Dark**
@@ -180,7 +180,7 @@ jobs:
 
       - name: Install dependencies
         run: python -m pip install -r cache/requirements.txt
-        
+
       - name: Update README file
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
