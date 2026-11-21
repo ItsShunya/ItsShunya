@@ -16,4 +16,4 @@ tzdata = "*"
 python-dotenv = "*"
 
 [requires]
-python_version = "3.11.0"
+python_version = "3.13"
